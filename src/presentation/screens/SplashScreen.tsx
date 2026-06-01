@@ -58,8 +58,8 @@ export function SplashScreen({ onDone }: SplashScreenProps) {
           >
             {/* Central Graphic */}
             <View style={styles.graphicContainer}>
-              <View style={[styles.ringOuter, { borderColor: t.colors.line }]}>
-                <View style={[styles.ringInner, { borderColor: t.colors.primarySoft }]}>
+              <View style={[styles.ringOuter, { borderColor: t.colors.accent, opacity: 0.7 }]}>
+                <View style={[styles.ringInner, { borderColor: t.colors.secondary, opacity: 0.8 }]}>
                   <View style={[styles.core, { backgroundColor: t.colors.primary }]} />
                 </View>
               </View>
@@ -67,10 +67,10 @@ export function SplashScreen({ onDone }: SplashScreenProps) {
 
             {/* Title */}
             <View style={styles.titleContainer}>
-              <Text variant="h1" tone="ink" style={styles.titleLine1}>
+              <Text tone="ink" style={styles.titleLine1}>
                 Mi Recuerdo
               </Text>
-              <Text variant="display" tone="primary" style={styles.titleLine2}>
+              <Text tone="primary" style={styles.titleLine2}>
                 Vivo
               </Text>
             </View>
@@ -79,7 +79,7 @@ export function SplashScreen({ onDone }: SplashScreenProps) {
 
         {/* Footer */}
         <Animated.View style={[styles.footer, { opacity: pop }]}>
-          <Text variant="body" tone="faint" style={styles.footerText}>
+          <Text variant="small" tone="faint" style={styles.footerText}>
             Tu voz, guardada con cariño
           </Text>
         </Animated.View>
@@ -106,23 +106,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   graphicContainer: {
-    marginBottom: 30,
+    marginBottom: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },
   ringOuter: {
-    width: 132,
-    height: 132,
-    borderRadius: 66,
-    borderWidth: 2,
+    width: 124,
+    height: 124,
+    borderRadius: 62,
+    borderWidth: 3,
     alignItems: 'center',
     justifyContent: 'center',
   },
   ringInner: {
-    width: 86,
-    height: 86,
-    borderRadius: 43,
-    borderWidth: 2,
+    width: 82,
+    height: 82,
+    borderRadius: 41,
+    borderWidth: 3,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -135,18 +135,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   titleLine1: {
-    fontSize: 40,
-    lineHeight: 44,
-    marginBottom: 0,
+    fontFamily: 'Lora_500',
+    fontSize: 42,
+    lineHeight: 46,
+    marginBottom: -4,
   },
   titleLine2: {
     fontFamily: 'Lora_500_Italic',
-    fontSize: 40,
-    lineHeight: 44,
+    fontSize: 42,
+    lineHeight: 46,
   },
   footer: {
     position: 'absolute',
-    bottom: 70,
+    bottom: 60,
     paddingHorizontal: 40,
     alignItems: 'center',
   },
