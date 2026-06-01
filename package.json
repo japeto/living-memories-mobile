@@ -5,7 +5,11 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "test": "jest --passWithNoTests",
+    "lint": "eslint src/ App.js",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "prepare": "husky"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.1.1",
@@ -20,9 +24,22 @@
   "private": true,
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.29.7",
+    "@react-native/jest-preset": "^0.85.3",
+    "@testing-library/jest-native": "^5.4.3",
+    "@testing-library/react-native": "^13.3.3",
+    "@types/jest": "^30.0.0",
     "@types/react": "~19.2.14",
     "babel-plugin-transform-typescript-metadata": "^0.4.0",
     "babel-preset-expo": "~56.0.14",
+    "eslint": "^8.57.1",
+    "eslint-config-expo": "^56.0.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
+    "husky": "^9.1.7",
+    "jest": "^30.4.2",
+    "jest-expo": "^56.0.4",
+    "lint-staged": "^17.0.7",
+    "prettier": "^3.8.3",
     "typescript": "~6.0.3"
   }
 }

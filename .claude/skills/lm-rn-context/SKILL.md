@@ -34,17 +34,21 @@ src/
 ```
 
 ### 2. Dependency Rule
+
 - `Domain` knows NOTHING about `Data` or `Presentation`.
 - `Data` knows about `Domain` (it implements its interfaces and returns its Entities).
 - `Presentation` knows about `Domain` (to execute Use Cases).
 
 ### 3. Dependency Injection (tsyringe)
+
 Use `tsyringe` to decouple layers.
+
 - Decorate implementations with `@injectable()`.
 - Use tokens to inject interfaces: `@inject('IAuthRepository') authRepo: IAuthRepository`.
 - Register dependencies in `src/di/container.ts`.
 
 ### 4. MVVM with Hooks
+
 ViewModels are implemented as Custom Hooks. They resolve Use Cases from the DI container and expose state to the View.
 
 ```javascript
@@ -55,7 +59,7 @@ import { DoSomethingUseCase } from '../../domain/useCases/DoSomethingUseCase';
 
 export function useFeatureViewModel() {
   const [data, setData] = useState(null);
-  
+
   // Resolve dependency locally
   const doSomethingUseCase = container.resolve(DoSomethingUseCase);
 
@@ -69,6 +73,7 @@ export function useFeatureViewModel() {
 ```
 
 ### 5. Screens bind to ViewModels
+
 Screens should contain minimal to no logic. They delegate everything to the ViewModel.
 
 ```javascript
@@ -82,11 +87,13 @@ export function FeatureScreen() {
 ```
 
 ### 6. react-native-paper Usage
+
 Always prefer Paper components over raw React Native primitives when an equivalent exists.
 
 ---
 
 ## Do NOT Use
+
 - Feature-slice folders (`src/features/...`) — we use layered architecture now.
 - `fetch` directly inside Presentation. All network calls go in Data.
 - Business logic inside ViewModels or Screens. Put it in Domain Use Cases.

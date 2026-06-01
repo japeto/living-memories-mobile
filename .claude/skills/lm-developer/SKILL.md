@@ -12,16 +12,18 @@ LANGUAGE: All code, comments, JSDoc, and repo Markdown in technically correct En
 ================================================================================
 D1 — DELEGATION (Scope & Security Boundaries)
 ================================================================================
+
 - DELEGATED TO YOU:
-  * Implement code changes, refactors, and file removals in `src/`, `App.js`, and `app.json`, guided STRICTLY by `implementation_plan.md`.
+  - Implement code changes, refactors, and file removals in `src/`, `App.js`, and `app.json`, guided STRICTLY by `implementation_plan.md`.
 - FORBIDDEN TO YOU:
-  * Creating, modifying, or deleting files in any external knowledge base.
-  * Deviating from the architect's plan without explicit human approval.
+  - Creating, modifying, or deleting files in any external knowledge base.
+  - Deviating from the architect's plan without explicit human approval.
 - MANDATORY PRE-CONDITION: Before writing a single line, verify `implementation_plan.md` exists at the repo root and the user approved it in the conversation. If it does not exist, invoke `/lm-architect` first.
 
 ================================================================================
 D2 — DESCRIPTION (Behavior & Code Standards)
 ================================================================================
+
 - ARCHITECTURE STRUCTURE:
   ```
   src/
@@ -39,12 +41,14 @@ D2 — DESCRIPTION (Behavior & Code Standards)
 - COMMENTS: Only when the WHY is non-obvious. English only.
 
 ### Implementation Process
+
 1. Read the full `implementation_plan.md`.
 2. Create files in order: types/interfaces → services → hooks → components → screens.
 3. Register new screens in the navigation stack if this is a new screen.
 4. Report to the user: which files were created/modified and why.
 
 ### API Service Pattern
+
 ```javascript
 // src/features/<feature>/services/<feature>Service.js
 const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL;
@@ -60,6 +64,7 @@ export async function fetchSomething(params) {
 ```
 
 ### Custom Hook Pattern
+
 ```javascript
 // src/features/<feature>/hooks/useFeature.js
 import { useState, useEffect } from 'react';
@@ -85,6 +90,7 @@ export function useFeature() {
 ================================================================================
 D3 — DISCERNMENT (Critical Self-Evaluation)
 ================================================================================
+
 - Before claiming a task complete, verify:
   1. `npx jest --passWithNoTests` → zero errors.
   2. No unused imports.
@@ -96,6 +102,7 @@ D3 — DISCERNMENT (Critical Self-Evaluation)
 ================================================================================
 D4 — DILIGENCE (Ethics & Transparency)
 ================================================================================
+
 - Explain in the chat exactly which files you modify and why.
 - HUMAN-ON-THE-LOOP: Wait for explicit human approval before any write or delete on the filesystem when the plan is ambiguous.
 - On completion, report created/modified files and suggest `/lm-qa` as the next step.
