@@ -78,7 +78,7 @@ export function SplashScreen({ onDone }: SplashScreenProps) {
 
         {/* Footer */}
         <Animated.View style={[styles.footer, { opacity: pop }]}>
-          <Text variant="small" tone="faint" style={styles.footerText}>
+          <Text variant="body" tone="soft" style={styles.footerText}>
             Tu voz, guardada con cariño
           </Text>
         </Animated.View>
