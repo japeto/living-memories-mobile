@@ -126,7 +126,7 @@ export const fonts = {
 type TypeStyle = {
   fontFamily: string;
   fontSize: number;
-  fontWeight:
+  fontWeight?:
     | 'normal' | 'bold'
     | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
   lineHeight: number;
@@ -136,18 +136,18 @@ type TypeStyle = {
 
 /* lineHeight is in absolute px (RN does not accept unitless) */
 export const type: Record<string, TypeStyle> = {
-  display: { fontFamily: 'Nunito_800', fontSize: 40, fontWeight: '800', lineHeight: 42, letterSpacing: -0.4 },
-  h1:      { fontFamily: 'Nunito_800', fontSize: 30, fontWeight: '800', lineHeight: 33, letterSpacing: -0.3 },
-  h2:      { fontFamily: 'Nunito_800', fontSize: 23, fontWeight: '800', lineHeight: 26 },
-  h3:      { fontFamily: 'Nunito_700', fontSize: 19, fontWeight: '700', lineHeight: 23 },
-  body:    { fontFamily: 'Nunito_500', fontSize: 17, fontWeight: '500', lineHeight: 26 },
-  bodyLg:  { fontFamily: 'Nunito_500', fontSize: 19, fontWeight: '500', lineHeight: 29 },
-  label:   { fontFamily: 'Nunito_700', fontSize: 15, fontWeight: '700', lineHeight: 20, letterSpacing: 0.3 },
-  small:   { fontFamily: 'Nunito_600', fontSize: 14, fontWeight: '600', lineHeight: 19 },
-  tiny:    { fontFamily: 'Nunito_700', fontSize: 12, fontWeight: '700', lineHeight: 15, letterSpacing: 0.7, textTransform: 'uppercase' },
+  display: { fontFamily: 'Nunito_800', fontSize: 40, lineHeight: 42, letterSpacing: -0.4 },
+  h1:      { fontFamily: 'Nunito_800', fontSize: 30, lineHeight: 33, letterSpacing: -0.3 },
+  h2:      { fontFamily: 'Nunito_800', fontSize: 23, lineHeight: 26 },
+  h3:      { fontFamily: 'Nunito_700', fontSize: 19, lineHeight: 23 },
+  body:    { fontFamily: 'Nunito_500', fontSize: 17, lineHeight: 26 },
+  bodyLg:  { fontFamily: 'Nunito_500', fontSize: 19, lineHeight: 29 },
+  label:   { fontFamily: 'Nunito_700', fontSize: 15, lineHeight: 20, letterSpacing: 0.3 },
+  small:   { fontFamily: 'Nunito_600', fontSize: 14, lineHeight: 19 },
+  tiny:    { fontFamily: 'Nunito_700', fontSize: 12, lineHeight: 15, letterSpacing: 0.7, textTransform: 'uppercase' },
   /* serif variants (quotes, memory headlines) */
-  serifBody: { fontFamily: 'Lora_500', fontSize: 18, fontWeight: '500', lineHeight: 27 },
-  serifLg:   { fontFamily: 'Lora_500', fontSize: 19, fontWeight: '500', lineHeight: 29 },
+  serifBody: { fontFamily: 'Lora_500', fontSize: 18, lineHeight: 27 },
+  serifLg:   { fontFamily: 'Lora_500', fontSize: 19, lineHeight: 29 },
 };
 
 /* ---------- Shadows ----------

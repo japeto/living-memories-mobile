@@ -140,9 +140,9 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   titleLine2: {
+    fontFamily: 'Lora_500_Italic',
     fontSize: 40,
     lineHeight: 44,
-    fontStyle: 'italic',
   },
   footer: {
     position: 'absolute',
