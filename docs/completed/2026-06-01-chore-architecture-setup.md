@@ -33,4 +33,4 @@ Upgrade all dependencies in the LivingMemories Mobile app to their latest versio
 > [!WARNING]
 > **Major Version Bump**: Upgrading from SDK 54 to 56 skips a major version (55). There might be breaking changes in React Native 0.85 or the Expo SDK itself. I will handle these if they arise during compilation.
 >
-> **Background Task Ongoing**: Actualmente estoy terminando de instalar las dependencias de Clean Architecture (`tsyringe`). ¿Me autorizas a ejecutar este plan de actualización de seguridad inmediatamente después de que termine la instalación actual?
+> **Background Task Ongoing**: Currently installing Clean Architecture dependencies (`tsyringe`). Do you authorize me to run this security upgrade plan immediately after the current installation finishes?
