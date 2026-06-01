@@ -1,6 +1,6 @@
 /* ============================================================
-   Button — port de .btn (.btn-primary/ghost/soft/text)
-   Uso: <Button variant="primary" icon="mic" onPress={...}>Grabar</Button>
+   Button — .btn port (.btn-primary/ghost/soft/text)
+   Usage: <Button variant="primary" icon="mic" onPress={...}>Grabar</Button>
    ============================================================ */
 import React, { useRef } from 'react';
 import { Pressable, Animated, StyleProp, ViewStyle, View } from 'react-native';
@@ -15,7 +15,7 @@ export interface ButtonProps {
   variant?: Variant;
   icon?: IconName;
   iconRight?: IconName;
-  block?: boolean;          // ancho completo
+  block?: boolean;          // full width
   onPress?: () => void;
   disabled?: boolean;
   style?: StyleProp<ViewStyle>;
@@ -37,7 +37,7 @@ export function Button({
   const press = (to: number) =>
     Animated.spring(scale, { toValue: to, useNativeDriver: true, speed: 40, bounciness: 0 }).start();
 
-  // estilos por variante
+  // variant styles
   const surfaces: Record<Variant, ViewStyle> = {
     primary: { backgroundColor: t.colors.primary, ...t.shadow.primary(t.colors.primary) },
     ghost: { backgroundColor: 'transparent', borderWidth: 2, borderColor: t.colors.line },

@@ -1,7 +1,7 @@
 /* ============================================================
-   Icon — set de línea portado a react-native-svg
-   (mismas rutas que components.jsx, trazo redondeado)
-   Uso: <Icon name="mic" size={26} color={theme.colors.primary} />
+   Icon — line set ported to react-native-svg
+   (same paths as components.jsx, rounded stroke)
+   Usage: <Icon name="mic" size={26} color={theme.colors.primary} />
    ============================================================ */
 import React from 'react';
 import Svg, { Path, Rect, Circle } from 'react-native-svg';

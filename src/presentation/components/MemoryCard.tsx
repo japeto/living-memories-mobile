@@ -1,5 +1,5 @@
 /* ============================================================
-   MemoryCard — port de la tarjeta de recuerdo (3 layouts)
+   MemoryCard — memory card port (3 layouts)
    layout: 'diario' (timeline) | 'galeria' | 'compacto'
    ============================================================ */
 import React from 'react';
@@ -29,7 +29,7 @@ export function MemoryCard({ m, layout = 'diario' }: MemoryCardProps) {
   const topic = resolveTopic(m.topic, t);
   const mood = resolveMood(m.mood);
 
-  /* ---- GALERÍA ---- */
+  /* ---- GALLERY ---- */
   if (layout === 'galeria') {
     return (
       <Card flush>
@@ -54,7 +54,7 @@ export function MemoryCard({ m, layout = 'diario' }: MemoryCardProps) {
     );
   }
 
-  /* ---- COMPACTO ---- */
+  /* ---- COMPACT ---- */
   if (layout === 'compacto') {
     return (
       <View style={{ flexDirection: 'row', gap: 14, alignItems: 'flex-start', paddingVertical: 14, paddingHorizontal: 4 }}>
@@ -77,7 +77,7 @@ export function MemoryCard({ m, layout = 'diario' }: MemoryCardProps) {
     );
   }
 
-  /* ---- DIARIO (timeline) ---- */
+  /* ---- DIARY (timeline) ---- */
   return (
     <View style={{ flexDirection: 'row', gap: 16 }}>
       <View style={{ alignItems: 'center', paddingTop: 4 }}>

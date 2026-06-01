@@ -1,7 +1,7 @@
 /* ============================================================
-   taxonomy — TOPICS (temas) y MOODS (sentimientos)
-   Port de components.jsx. Los colores 'soft' que en la web
-   apuntaban a CSS vars se resuelven por tema en runtime con
+   taxonomy — TOPICS and MOODS
+   Port of components.jsx. The 'soft' colors that on the web
+   pointed to CSS vars are resolved per theme at runtime with
    resolveTopic()/resolveMood().
    ============================================================ */
 import { IconName } from '../components/Icon';
@@ -13,7 +13,7 @@ export type MoodKey = 'Alegría' | 'Tranquilo' | 'Nostalgia' | 'Cansancio';
 interface TopicDef {
   icon: IconName;
   color: string;
-  /** clave de color suave del tema, o un hex fijo */
+  /** soft color key of the theme, or a fixed hex */
   soft: keyof Theme['colors'] | string;
 }
 
@@ -32,12 +32,12 @@ export const MOODS: Record<MoodKey, { color: string }> = {
   Cansancio: { color: '#b5793f' },
 };
 
-/** Devuelve color/soft/icon resueltos para el tema activo. */
+/** Returns resolved color/soft/icon for the active theme. */
 export function resolveTopic(key: TopicKey, theme: Theme) {
   const def = TOPICS[key] ?? TOPICS.Cotidiano;
   const soft = def.soft in theme.colors
     ? (theme.colors as any)[def.soft]
-    : def.soft; // hex literal
+    : def.soft; // literal hex
   return { icon: def.icon, color: def.color, soft };
 }
 

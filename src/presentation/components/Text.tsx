@@ -1,7 +1,7 @@
 /* ============================================================
-   Text — tipografía con variantes del sistema
-   Uso: <Text variant="h1">Hola</Text>
-        <Text variant="serifBody" tone="soft">cita…</Text>
+   Text — typography with system variants
+   Usage: <Text variant="h1">Hola</Text>
+        <Text variant="serifBody" tone="soft">quote…</Text>
    ============================================================ */
 import React from 'react';
 import { Text as RNText, TextProps, StyleProp, TextStyle } from 'react-native';
@@ -14,7 +14,7 @@ type Tone = 'ink' | 'soft' | 'faint' | 'primary' | 'onPrimary';
 export interface TextOwnProps extends TextProps {
   variant?: Variant;
   tone?: Tone;
-  color?: string;        // override directo
+  color?: string;        // direct override
   style?: StyleProp<TextStyle>;
 }
 

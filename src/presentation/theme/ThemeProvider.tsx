@@ -52,9 +52,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-/** Acceso al tema activo. Lanza si se usa fuera del Provider. */
+/** Active theme access. Throws if used outside the Provider. */
 export function useTheme(): Theme {
   const ctx = useContext(ThemeContext);
-  if (!ctx) throw new Error('useTheme debe usarse dentro de <ThemeProvider>');
+  if (!ctx) throw new Error('useTheme must be used within a <ThemeProvider>');
   return ctx;
 }

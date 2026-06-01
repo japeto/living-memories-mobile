@@ -1,9 +1,9 @@
 /* ============================================================
    Mi Recuerdo Vivo — Design Tokens (React Native)
-   Extraído de styles.css → valores nativos (sin CSS vars).
+   Extracted from styles.css → native values (no CSS vars).
    ============================================================ */
 
-/* ---------- Paleta por tema ---------- */
+/* ---------- Palette by theme ---------- */
 export type ThemeName = 'album' | 'sereno' | 'atardecer';
 
 export interface Palette {
@@ -14,7 +14,7 @@ export interface Palette {
   ink: string;
   inkSoft: string;
   inkFaint: string;
-  line: string;          // rgba — borde sutil
+  line: string;          // rgba — subtle border
   primary: string;
   primaryDeep: string;
   primarySoft: string;
@@ -28,7 +28,7 @@ export interface Palette {
 }
 
 export const themes: Record<ThemeName, Palette> = {
-  /* TEMA A · Álbum cálido (default) */
+  /* THEME A · Warm album (default) */
   album: {
     bg: '#f4ece0',
     bg2: '#ede2d2',
@@ -49,7 +49,7 @@ export const themes: Record<ThemeName, Palette> = {
     heroFrom: '#f4ece0',
     heroTo: '#efe0cd',
   },
-  /* TEMA B · Sereno (bienestar, salvia) */
+  /* THEME B · Serene (wellness, sage) */
   sereno: {
     bg: '#eef1ec',
     bg2: '#e4eae3',
@@ -70,7 +70,7 @@ export const themes: Record<ThemeName, Palette> = {
     heroFrom: '#eef1ec',
     heroTo: '#e3ebe4',
   },
-  /* TEMA C · Atardecer (cálido profundo) */
+  /* THEME C · Sunset (deep warm) */
   atardecer: {
     bg: '#f6e7d6',
     bg2: '#f1dcc4',
@@ -93,7 +93,7 @@ export const themes: Record<ThemeName, Palette> = {
   },
 };
 
-/* ---------- Radios ---------- */
+/* ---------- Radius ---------- */
 export const radius = {
   sm: 12,
   md: 18,
@@ -102,7 +102,7 @@ export const radius = {
   pill: 9999,
 } as const;
 
-/* ---------- Espaciado (escala base 4) ---------- */
+/* ---------- Spacing (base 4 scale) ---------- */
 export const spacing = {
   xs: 4,
   sm: 8,
@@ -113,11 +113,11 @@ export const spacing = {
   '3xl': 44,
 } as const;
 
-/* ---------- Tipografía ----------
-   Fuentes: 'Nunito' (sans) y 'Lora' (serif).
-   Carga con expo-font / react-native fonts. Los pesos numéricos
-   de la web se mapean a familias por peso si usas archivos .ttf
-   separados (ver README). Aquí incluimos también fontWeight RN.   */
+/* ---------- Typography ----------
+   Fonts: 'Nunito' (sans) and 'Lora' (serif).
+   Loaded with expo-font / react-native fonts. The numerical weights
+   from the web map to font families by weight if using separate .ttf files
+   (see README). Here we also include RN fontWeight.   */
 export const fonts = {
   sans: 'Nunito',
   serif: 'Lora',
@@ -134,7 +134,7 @@ type TypeStyle = {
   textTransform?: 'uppercase';
 };
 
-/* lineHeight se da en px absolutos (RN no acepta unitless) */
+/* lineHeight is in absolute px (RN does not accept unitless) */
 export const type: Record<string, TypeStyle> = {
   display: { fontFamily: 'Nunito_800', fontSize: 40, fontWeight: '800', lineHeight: 42, letterSpacing: -0.4 },
   h1:      { fontFamily: 'Nunito_800', fontSize: 30, fontWeight: '800', lineHeight: 33, letterSpacing: -0.3 },
@@ -145,14 +145,14 @@ export const type: Record<string, TypeStyle> = {
   label:   { fontFamily: 'Nunito_700', fontSize: 15, fontWeight: '700', lineHeight: 20, letterSpacing: 0.3 },
   small:   { fontFamily: 'Nunito_600', fontSize: 14, fontWeight: '600', lineHeight: 19 },
   tiny:    { fontFamily: 'Nunito_700', fontSize: 12, fontWeight: '700', lineHeight: 15, letterSpacing: 0.7, textTransform: 'uppercase' },
-  /* variantes serif (citas, titulares de recuerdo) */
+  /* serif variants (quotes, memory headlines) */
   serifBody: { fontFamily: 'Lora_500', fontSize: 18, fontWeight: '500', lineHeight: 27 },
   serifLg:   { fontFamily: 'Lora_500', fontSize: 19, fontWeight: '500', lineHeight: 29 },
 };
 
-/* ---------- Sombras ----------
-   La web usa box-shadows multicapa; RN solo admite una capa
-   (iOS: shadow*, Android: elevation). Aproximación equivalente. */
+/* ---------- Shadows ----------
+   The web uses multi-layer box-shadows; RN only supports one layer
+   (iOS: shadow*, Android: elevation). Equivalent approximation. */
 export const shadow = {
   card: {
     shadowColor: 'rgba(40,30,20,1)',
@@ -168,7 +168,7 @@ export const shadow = {
     shadowOffset: { width: 0, height: 16 },
     elevation: 8,
   },
-  /* sombra teñida bajo botones primarios */
+  /* tinted shadow under primary buttons */
   primary: (color: string) => ({
     shadowColor: color,
     shadowOpacity: 0.45,
@@ -178,6 +178,6 @@ export const shadow = {
   }),
 } as const;
 
-/* ---------- Curva de animación (≈ var(--ease)) ----------
-   cubic-bezier(.22,.61,.36,1). Usa con Easing.bezier en Animated. */
+/* ---------- Animation curve (≈ var(--ease)) ----------
+   cubic-bezier(.22,.61,.36,1). Use with Easing.bezier in Animated. */
 export const easing = { x1: 0.22, y1: 0.61, x2: 0.36, y2: 1 } as const;

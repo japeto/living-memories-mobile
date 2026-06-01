@@ -1,7 +1,7 @@
 /* ============================================================
-   RecordButton — port de .rec (3 estilos: pulso / halo / onda)
-   Animado con Animated + Easing. Sin CSS keyframes.
-   Uso: <RecordButton recStyle="pulso" recording={r} onToggle={...} />
+   RecordButton — .rec port (3 styles: pulse / halo / wave)
+   Animated with Animated + Easing. No CSS keyframes.
+   Usage: <RecordButton recStyle="pulse" recording={r} onToggle={...} />
    ============================================================ */
 import React, { useEffect, useRef } from 'react';
 import { Pressable, Animated, View, Easing } from 'react-native';
@@ -17,7 +17,7 @@ export interface RecordButtonProps {
   size?: number;
 }
 
-/* ---- una onda concéntrica (pulso) ---- */
+/* ---- a concentric wave (pulse) ---- */
 function Ripple({ color, size, delay, active }: { color: string; size: number; delay: number; active: boolean }) {
   const v = useRef(new Animated.Value(0)).current;
   useEffect(() => {
@@ -42,7 +42,7 @@ function Ripple({ color, size, delay, active }: { color: string; size: number; d
   );
 }
 
-/* ---- barras de forma de onda (onda) ---- */
+/* ---- waveform bars (wave) ---- */
 function Wave({ color }: { color: string }) {
   const bars = [0, 0.15, 0.3, 0.12, 0.26, 0.05];
   return (

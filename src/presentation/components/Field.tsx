@@ -1,6 +1,6 @@
 /* ============================================================
-   Field — port de .field / .input-wrap (TextInput)
-   Uso: <Field label="Correo" icon="mail" value={v} onChangeText={...} />
+   Field — .field / .input-wrap port (TextInput)
+   Usage: <Field label="Correo" icon="mail" value={v} onChangeText={...} />
         <Field label="Clave" icon="lock" secureTextEntry ... />
    ============================================================ */
 import React, { useState } from 'react';
@@ -12,7 +12,7 @@ import { Icon, IconName } from './Icon';
 export interface FieldProps extends Omit<TextInputProps, 'style'> {
   label?: string;
   icon?: IconName;
-  secureTextEntry?: boolean;   // muestra el toggle de ojo
+  secureTextEntry?: boolean;   // shows the eye toggle
 }
 
 export function Field({ label, icon, secureTextEntry, ...rest }: FieldProps) {

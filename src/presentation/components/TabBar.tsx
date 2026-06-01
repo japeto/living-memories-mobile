@@ -1,8 +1,8 @@
 /* ============================================================
-   TabBar — port de .tabbar / .tab (navegación inferior)
-   Uso: <TabBar active="home" onChange={setTab} />
-   Nota: incluye safe-area inferior básica. Para notch dinámico
-   usa react-native-safe-area-context y suma el inset a paddingBottom.
+   TabBar — .tabbar / .tab port (bottom navigation)
+   Usage: <TabBar active="home" onChange={setTab} />
+   Note: includes basic bottom safe-area. For dynamic notch
+   use react-native-safe-area-context and add the inset to paddingBottom.
    ============================================================ */
 import React from 'react';
 import { View, Pressable } from 'react-native';
@@ -22,7 +22,7 @@ const TABS: { id: TabId; label: string; icon: IconName }[] = [
 export interface TabBarProps {
   active: TabId;
   onChange: (id: TabId) => void;
-  bottomInset?: number;   // safe-area inferior del dispositivo
+  bottomInset?: number;   // device bottom safe-area
 }
 
 export function TabBar({ active, onChange, bottomInset = 30 }: TabBarProps) {

@@ -1,7 +1,7 @@
 /* ============================================================
-   Card — port de .card (superficie + radio lg + sombra)
-   Uso: <Card><Text>…</Text></Card>
-        <Card flush>…</Card>   // sin padding (para cabeceras de color)
+   Card — .card port (surface + lg radius + shadow)
+   Usage: <Card><Text>…</Text></Card>
+        <Card flush>…</Card>   // no padding (for colored headers)
    ============================================================ */
 import React from 'react';
 import { View, StyleProp, ViewStyle } from 'react-native';
@@ -9,7 +9,7 @@ import { useTheme } from '../theme/ThemeProvider';
 
 export interface CardProps {
   children?: React.ReactNode;
-  flush?: boolean;             // sin padding interno
+  flush?: boolean;             // no internal padding
   style?: StyleProp<ViewStyle>;
 }
 
