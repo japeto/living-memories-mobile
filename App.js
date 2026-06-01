@@ -1,6 +1,7 @@
 import 'reflect-metadata'; // MUST be the first import
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+
 import { TestScreen } from './src/presentation/screens/TestScreen';
 
 // Initialize the DI container
