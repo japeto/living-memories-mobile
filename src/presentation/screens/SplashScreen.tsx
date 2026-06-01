@@ -58,11 +58,10 @@ export function SplashScreen({ onDone }: SplashScreenProps) {
           >
             {/* Central Graphic */}
             <View style={styles.graphicContainer}>
-              <View style={[styles.ringOuter, { borderColor: t.colors.accent, opacity: 0.7 }]}>
-                <View style={[styles.ringInner, { borderColor: t.colors.secondary, opacity: 0.8 }]}>
-                  <View style={[styles.core, { backgroundColor: t.colors.primary }]} />
-                </View>
-              </View>
+              <View style={[styles.ringOuter, { borderColor: t.colors.accent, opacity: 0.4 }]} />
+              <View style={[styles.ringMiddle, { borderColor: t.colors.secondary, opacity: 0.5 }]} />
+              <View style={[styles.ringInner, { borderColor: t.colors.primary, opacity: 0.15 }]} />
+              <View style={[styles.core, { backgroundColor: t.colors.primary }]} />
             </View>
 
             {/* Title */}
@@ -106,27 +105,35 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   graphicContainer: {
+    width: 140,
+    height: 140,
     marginBottom: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },
   ringOuter: {
-    width: 124,
-    height: 124,
-    borderRadius: 62,
-    borderWidth: 3,
-    alignItems: 'center',
-    justifyContent: 'center',
+    position: 'absolute',
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+    borderWidth: 2.5,
+  },
+  ringMiddle: {
+    position: 'absolute',
+    width: 104,
+    height: 104,
+    borderRadius: 52,
+    borderWidth: 2.5,
   },
   ringInner: {
-    width: 82,
-    height: 82,
-    borderRadius: 41,
-    borderWidth: 3,
-    alignItems: 'center',
-    justifyContent: 'center',
+    position: 'absolute',
+    width: 68,
+    height: 68,
+    borderRadius: 34,
+    borderWidth: 1.5,
   },
   core: {
+    position: 'absolute',
     width: 32,
     height: 32,
     borderRadius: 16,
