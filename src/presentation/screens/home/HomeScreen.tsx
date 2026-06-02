@@ -9,11 +9,13 @@ import { AppStackParamList } from '../../navigation/AppNavigator';
 import { useHomeViewModel } from '../../viewModels/home/useHomeViewModel';
 import { RecordingHero } from '../../components/home/RecordingHero';
 import { MemoryCard } from '../../components/home/MemoryCard';
+import { useAuth } from '../../providers/AuthProvider';
 
 export function HomeScreen() {
   const theme = useTheme();
   const vm = useHomeViewModel();
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>();
+  const { userName } = useAuth();
 
   // Capitalize first letter helper
   const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -27,7 +29,7 @@ export function HomeScreen() {
             {dateStr}
           </Text>
           <Text variant="headlineMedium" style={styles.greeting}>
-            Buenos días, <Text style={{ color: theme.colors.primary, fontWeight: 'bold' }}>Rosa</Text>
+            Buenos días, <Text style={{ color: theme.colors.primary, fontWeight: 'bold' }}>{userName || 'Usuario'}</Text>
           </Text>
         </View>
         <TouchableRipple onPress={() => navigation.navigate('Profile')} style={{ borderRadius: 24 }} borderless>

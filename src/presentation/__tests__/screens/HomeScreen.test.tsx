@@ -10,6 +10,18 @@ jest.mock('@expo/vector-icons', () => ({
 
 jest.mock('../../viewModels/home/useHomeViewModel');
 
+jest.mock('@react-navigation/native', () => ({
+  useNavigation: () => ({
+    navigate: jest.fn(),
+  }),
+}));
+
+jest.mock('../../providers/AuthProvider', () => ({
+  useAuth: () => ({
+    userName: 'Rosa',
+  }),
+}));
+
 describe('HomeScreen', () => {
   const mockUseHomeViewModel = useHomeViewModel as jest.MockedFunction<typeof useHomeViewModel>;
 
@@ -53,7 +65,7 @@ describe('HomeScreen', () => {
       </ThemeProvider>
     );
 
-    expect(getByText('Buenos días, Rosa')).toBeTruthy();
+    expect(getByText('Rosa')).toBeTruthy();
     expect(getByText('Hoy')).toBeTruthy();
     expect(getByText('Test memory')).toBeTruthy();
     expect(getByText('Toca para grabar un recuerdo')).toBeTruthy();

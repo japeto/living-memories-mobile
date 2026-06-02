@@ -7,8 +7,9 @@ import { setSessionExpiredCallback } from '../../data/network/apiClient';
 export interface AuthContextType {
   isAuthenticated: boolean;
   userId: string | null;
+  userName: string | null;
   isRestoringSession: boolean;
-  login: (userId: string) => void;
+  login: (userId: string, userName?: string) => void;
   logout: () => void;
 }
 
@@ -21,6 +22,7 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [userId, setUserId] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string | null>(null);
   const [isRestoringSession, setIsRestoringSession] = useState<boolean>(true);
 
   useEffect(() => {
@@ -35,6 +37,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       .then((user) => {
         if (user) {
           setUserId(user.userId);
+          setUserName(user.displayName ?? null);
           setIsAuthenticated(true);
         }
       })
@@ -46,8 +49,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
   }, []);
 
-  const login = (id: string) => {
+  const login = (id: string, name?: string) => {
     setUserId(id);
+    setUserName(name ?? null);
     setIsAuthenticated(true);
   };
 
@@ -55,11 +59,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const repo = container.resolve(AuthRepository);
     repo.clearSession().catch(() => {});
     setUserId(null);
+    setUserName(null);
     setIsAuthenticated(false);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, userId, isRestoringSession, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, userId, userName, isRestoringSession, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
