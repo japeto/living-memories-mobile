@@ -6,7 +6,7 @@ import { useRegisterViewModel } from '../../../viewModels/auth/useRegisterViewMo
 // Mock theme and navigation
 jest.mock('../../../theme/ThemeProvider', () => ({
   useTheme: () => ({
-    colors: { background: '#FFF', primary: '#00F', line: '#EEE' },
+    colors: { background: '#FFF', primary: '#00F', line: '#EEE', error: '#F00' },
     radius: { full: 999 },
   }),
 }));
@@ -31,16 +31,20 @@ jest.mock('../../../components/AuthHeader', () => ({
 }));
 
 jest.mock('../../../components/Field', () => ({
-  Field: ({ label, value, onChangeText, placeholder, ...props }: any) => {
-    const { TextInput } = require('react-native');
+  Field: ({ label, value, onChangeText, onBlur, placeholder, error, ...props }: any) => {
+    const { TextInput, Text, View } = require('react-native');
     return (
-      <TextInput
-        testID={`input-${label}`}
-        value={value}
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-        {...props}
-      />
+      <View>
+        <TextInput
+          testID={`input-${label}`}
+          value={value}
+          onChangeText={onChangeText}
+          onBlur={onBlur}
+          placeholder={placeholder}
+          {...props}
+        />
+        {error ? <Text testID={`error-${label}`}>{error}</Text> : null}
+      </View>
     );
   },
 }));
@@ -81,6 +85,12 @@ const mockViewModel = {
   onRegister: jest.fn(),
   navigateToLogin: jest.fn(),
   goBack: jest.fn(),
+  nameError: '',
+  emailError: '',
+  pinError: '',
+  validateName: jest.fn(),
+  validateEmail: jest.fn(),
+  validatePin: jest.fn(),
 };
 
 describe('RegisterScreen', () => {
@@ -110,6 +120,39 @@ describe('RegisterScreen', () => {
 
     fireEvent.changeText(getByTestId('input-Crea un PIN (4 dígitos)'), '1234');
     expect(mockViewModel.setPin).toHaveBeenCalledWith('1234');
+  });
+
+  it('calls validation functions on blur', () => {
+    const { getByTestId } = render(<RegisterScreen />);
+    
+    fireEvent(getByTestId('input-Nombre completo'), 'blur');
+    expect(mockViewModel.validateName).toHaveBeenCalled();
+
+    fireEvent(getByTestId('input-Correo electrónico'), 'blur');
+    expect(mockViewModel.validateEmail).toHaveBeenCalled();
+
+    fireEvent(getByTestId('input-Crea un PIN (4 dígitos)'), 'blur');
+    expect(mockViewModel.validatePin).toHaveBeenCalled();
+  });
+
+  it('displays error messages when they are present', () => {
+    (useRegisterViewModel as jest.Mock).mockReturnValue({
+      ...mockViewModel,
+      nameError: 'Nombre inválido',
+      emailError: 'Correo inválido',
+      pinError: 'PIN inválido',
+    });
+
+    const { getByTestId, getByText } = render(<RegisterScreen />);
+    
+    expect(getByTestId('error-Nombre completo')).toBeTruthy();
+    expect(getByText('Nombre inválido')).toBeTruthy();
+
+    expect(getByTestId('error-Correo electrónico')).toBeTruthy();
+    expect(getByText('Correo inválido')).toBeTruthy();
+
+    expect(getByTestId('error-Crea un PIN (4 dígitos)')).toBeTruthy();
+    expect(getByText('PIN inválido')).toBeTruthy();
   });
 
   it('toggles terms agreement checkbox', () => {

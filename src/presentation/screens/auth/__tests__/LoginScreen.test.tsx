@@ -6,7 +6,7 @@ import { useLoginViewModel } from '../../../viewModels/auth/useLoginViewModel';
 // Mock theme and navigation
 jest.mock('../../../theme/ThemeProvider', () => ({
   useTheme: () => ({
-    colors: { background: '#FFF', primary: '#00F', line: '#EEE' },
+    colors: { background: '#FFF', primary: '#00F', line: '#EEE', error: '#F00' },
     radius: { full: 999 },
   }),
 }));
@@ -31,16 +31,20 @@ jest.mock('../../../components/AuthHeader', () => ({
 }));
 
 jest.mock('../../../components/Field', () => ({
-  Field: ({ label, value, onChangeText, placeholder, ...props }: any) => {
-    const { TextInput } = require('react-native');
+  Field: ({ label, value, onChangeText, onBlur, placeholder, error, ...props }: any) => {
+    const { TextInput, Text, View } = require('react-native');
     return (
-      <TextInput
-        testID={`input-${label}`}
-        value={value}
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-        {...props}
-      />
+      <View>
+        <TextInput
+          testID={`input-${label}`}
+          value={value}
+          onChangeText={onChangeText}
+          onBlur={onBlur}
+          placeholder={placeholder}
+          {...props}
+        />
+        {error ? <Text testID={`error-${label}`}>{error}</Text> : null}
+      </View>
     );
   },
 }));
@@ -72,6 +76,10 @@ const mockViewModel = {
   isLoading: false,
   onLogin: jest.fn(),
   navigateToRegister: jest.fn(),
+  emailError: '',
+  pinError: '',
+  validateEmail: jest.fn(),
+  validatePin: jest.fn(),
 };
 
 describe('LoginScreen', () => {
@@ -110,8 +118,35 @@ describe('LoginScreen', () => {
     expect(mockViewModel.setPin).toHaveBeenCalledWith('1234');
   });
 
+  it('calls validation functions on blur', () => {
+    const { getByTestId } = render(<LoginScreen />);
+    
+    const emailInput = getByTestId('input-Correo electrónico');
+    fireEvent(emailInput, 'blur');
+    expect(mockViewModel.validateEmail).toHaveBeenCalled();
+
+    const pinInput = getByTestId('input-PIN de acceso');
+    fireEvent(pinInput, 'blur');
+    expect(mockViewModel.validatePin).toHaveBeenCalled();
+  });
+
+  it('displays error messages when they are present', () => {
+    (useLoginViewModel as jest.Mock).mockReturnValue({
+      ...mockViewModel,
+      emailError: 'Correo inválido',
+      pinError: 'PIN inválido',
+    });
+
+    const { getByTestId, getByText } = render(<LoginScreen />);
+    
+    expect(getByTestId('error-Correo electrónico')).toBeTruthy();
+    expect(getByText('Correo inválido')).toBeTruthy();
+
+    expect(getByTestId('error-PIN de acceso')).toBeTruthy();
+    expect(getByText('PIN inválido')).toBeTruthy();
+  });
+
   it('calls onLogin when button is pressed', () => {
-    // Modify mock to allow button click
     (useLoginViewModel as jest.Mock).mockReturnValue({
       ...mockViewModel,
       email: 'a@a.com',

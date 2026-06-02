@@ -46,6 +46,8 @@ export function RegisterScreen() {
             onChangeText={vm.setName}
             autoCapitalize="words"
             placeholder="Juan Pérez"
+            error={vm.nameError}
+            onBlur={vm.validateName}
           />
 
           <Field
@@ -56,6 +58,8 @@ export function RegisterScreen() {
             keyboardType="email-address"
             autoCapitalize="none"
             placeholder="ejemplo@correo.com"
+            error={vm.emailError}
+            onBlur={vm.validateEmail}
           />
 
           <Field
@@ -67,6 +71,8 @@ export function RegisterScreen() {
             keyboardType="numeric"
             maxLength={4}
             placeholder="****"
+            error={vm.pinError}
+            onBlur={vm.validatePin}
           />
 
           <Pressable 
