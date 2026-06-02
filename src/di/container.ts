@@ -1,7 +1,8 @@
 import 'reflect-metadata';
 import { container } from 'tsyringe';
+import { MockMemoryRepository } from '../data/repositories/MockMemoryRepository';
 
-// Here we will register implementations to interfaces
-// For now, it's empty as we only resolve a concrete class (TestUseCase)
+// Register implementations to interfaces
+container.registerSingleton('IMemoryRepository', MockMemoryRepository);
 
 export { container };
