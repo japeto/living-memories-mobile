@@ -1,5 +1,5 @@
 import 'reflect-metadata'; // MUST be the first import
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import * as SplashScreenNative from 'expo-splash-screen';
 import { useFonts, Nunito_500Medium, Nunito_600SemiBold, Nunito_700Bold, Nunito_800ExtraBold } from '@expo-google-fonts/nunito';
@@ -8,6 +8,7 @@ import { Lora_500Medium, Lora_500Medium_Italic } from '@expo-google-fonts/lora';
 import { NavigationContainer } from '@react-navigation/native';
 import { ThemeProvider } from './src/presentation/theme/ThemeProvider';
 import { AuthNavigator } from './src/presentation/navigation/AuthNavigator';
+import { SplashScreen } from './src/presentation/screens/SplashScreen';
 import './src/di/container';
 
 // Keep the native splash screen visible while we fetch resources
@@ -16,6 +17,7 @@ SplashScreenNative.preventAutoHideAsync().catch(() => {
 });
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
   const [fontsLoaded, fontError] = useFonts({
     Nunito_500: Nunito_500Medium,
     Nunito_600: Nunito_600SemiBold,
@@ -38,9 +40,13 @@ export default function App() {
   return (
     <ThemeProvider>
       <View style={styles.container} onLayout={onLayoutRootView}>
-        <NavigationContainer>
-          <AuthNavigator />
-        </NavigationContainer>
+        {showSplash ? (
+          <SplashScreen onDone={() => setShowSplash(false)} />
+        ) : (
+          <NavigationContainer>
+            <AuthNavigator />
+          </NavigationContainer>
+        )}
       </View>
     </ThemeProvider>
   );
