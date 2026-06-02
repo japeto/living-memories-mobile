@@ -14,7 +14,7 @@ export function AuthHeader({ title, subtitle, onBack }: AuthHeaderProps) {
   const t = useTheme();
 
   return (
-    <View style={{ marginBottom: 32, gap: 8 }}>
+    <View style={{ marginBottom: 32, gap: 8, alignItems: 'center' }}>
       <View
         style={{
           width: 48,
@@ -44,11 +44,11 @@ export function AuthHeader({ title, subtitle, onBack }: AuthHeaderProps) {
           <Icon name="back" size={28} color={t.colors.ink} />
         </Pressable>
       )}
-      <Text variant="h1" style={{ fontSize: 32 }}>
+      <Text variant="h1" style={{ fontSize: 32, textAlign: 'center' }}>
         {title}
       </Text>
       {subtitle && (
-        <Text variant="body" tone="soft" style={{ fontSize: 18 }}>
+        <Text variant="body" tone="soft" style={{ fontSize: 18, textAlign: 'center' }}>
           {subtitle}
         </Text>
       )}

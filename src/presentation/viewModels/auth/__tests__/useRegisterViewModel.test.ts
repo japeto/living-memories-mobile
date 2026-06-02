@@ -125,9 +125,8 @@ describe('useRegisterViewModel', () => {
       result.current.setAgree(true);
     });
 
-    const registerPromise = result.current.onRegister();
-
     await act(async () => {
+      const registerPromise = result.current.onRegister();
       jest.advanceTimersByTime(1500);
       await registerPromise;
     });

@@ -59,12 +59,14 @@ export function LoginScreen() {
           />
 
           <Button
-            title="Ingresar"
             onPress={vm.onLogin}
             loading={vm.isLoading}
             disabled={vm.isLoading || !vm.email || vm.pin.length < 4}
             style={{ marginTop: 12 }}
-          />
+            iconRight="arrow"
+          >
+            Ingresar
+          </Button>
         </View>
 
         <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 32 }}>

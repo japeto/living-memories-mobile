@@ -93,12 +93,14 @@ export function RegisterScreen() {
           </Pressable>
 
           <Button
-            title="Registrarme"
             onPress={vm.onRegister}
             loading={vm.isLoading}
             disabled={vm.isLoading || !vm.name || !vm.email || vm.pin.length < 4 || !vm.agree}
             style={{ marginTop: 12 }}
-          />
+            iconRight="arrow"
+          >
+            Registrarme
+          </Button>
         </View>
 
         <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 32 }}>

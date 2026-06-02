@@ -46,11 +46,12 @@ jest.mock('../../../components/Field', () => ({
 }));
 
 jest.mock('../../../components/Button', () => ({
-  Button: ({ title, onPress, disabled, loading }: any) => {
+  Button: ({ children, title, onPress, disabled, loading }: any) => {
     const { Pressable, Text } = require('react-native');
+    const label = children || title;
     return (
-      <Pressable testID={`button-${title}`} onPress={onPress} disabled={disabled || loading}>
-        <Text>{loading ? 'Loading...' : title}</Text>
+      <Pressable testID={`button-${label}`} onPress={onPress} disabled={disabled || loading}>
+        <Text>{loading ? 'Loading...' : label}</Text>
       </Pressable>
     );
   },

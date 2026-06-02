@@ -96,9 +96,8 @@ describe('useLoginViewModel', () => {
       result.current.setPin('1234');
     });
 
-    const loginPromise = result.current.onLogin();
-
     await act(async () => {
+      const loginPromise = result.current.onLogin();
       jest.advanceTimersByTime(1500);
       await loginPromise;
     });
