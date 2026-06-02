@@ -7,17 +7,25 @@ import { apiClient, ApiError } from '../../network/apiClient';
 const KEYS = {
   USER_ID: 'auth_user_id',
   EMAIL: 'auth_email',
+  ACCESS_TOKEN: 'auth_access_token',
+  REFRESH_TOKEN: 'auth_refresh_token',
 } as const;
 
 interface RegisterResponseDTO {
   user_id: string;
   display_name: string;
   email: string;
+  access_token: string;
+  refresh_token: string;
+  token_type: string;
 }
 
 interface LoginResponseDTO {
   authenticated: boolean;
   user_id: string;
+  access_token: string;
+  refresh_token: string;
+  token_type: string;
 }
 
 @injectable()
@@ -30,6 +38,8 @@ export class AuthRepository implements IAuthRepository {
         pin,
         conditions_accepted: true,
       });
+      await SecureStore.setItemAsync(KEYS.ACCESS_TOKEN, data.access_token);
+      await SecureStore.setItemAsync(KEYS.REFRESH_TOKEN, data.refresh_token);
       return { userId: data.user_id };
     } catch (error) {
       throw error as ApiError;
@@ -42,6 +52,8 @@ export class AuthRepository implements IAuthRepository {
         email,
         pin,
       });
+      await SecureStore.setItemAsync(KEYS.ACCESS_TOKEN, data.access_token);
+      await SecureStore.setItemAsync(KEYS.REFRESH_TOKEN, data.refresh_token);
       return { userId: data.user_id };
     } catch (error) {
       throw error as ApiError;
@@ -50,7 +62,8 @@ export class AuthRepository implements IAuthRepository {
 
   async getStoredSession(): Promise<User | null> {
     const userId = await SecureStore.getItemAsync(KEYS.USER_ID);
-    if (!userId) return null;
+    const refreshToken = await SecureStore.getItemAsync(KEYS.REFRESH_TOKEN);
+    if (!userId || !refreshToken) return null;
     return { userId };
   }
 
@@ -59,8 +72,15 @@ export class AuthRepository implements IAuthRepository {
   }
 
   async clearSession(): Promise<void> {
+    try {
+      await apiClient.post('/api/v1/auth/logout');
+    } catch (error) {
+      console.warn('Logout request failed or user already logged out', error);
+    }
     await SecureStore.deleteItemAsync(KEYS.USER_ID);
     await SecureStore.deleteItemAsync(KEYS.EMAIL);
+    await SecureStore.deleteItemAsync(KEYS.ACCESS_TOKEN);
+    await SecureStore.deleteItemAsync(KEYS.REFRESH_TOKEN);
   }
 
   async getStoredEmail(): Promise<string | null> {

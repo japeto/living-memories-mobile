@@ -2,6 +2,7 @@ import React, { createContext, useState, useContext, useEffect, ReactNode } from
 import { container } from '../../di/container';
 import { RestoreSessionUseCase } from '../../domain/auth/useCases/RestoreSessionUseCase';
 import { AuthRepository } from '../../data/auth/repositories/AuthRepository';
+import { setSessionExpiredCallback } from '../../data/network/apiClient';
 
 export interface AuthContextType {
   isAuthenticated: boolean;
@@ -23,6 +24,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isRestoringSession, setIsRestoringSession] = useState<boolean>(true);
 
   useEffect(() => {
+    // Register the force logout callback for the API client
+    setSessionExpiredCallback(() => {
+      logout();
+    });
+
     const restoreSession = container.resolve(RestoreSessionUseCase);
     restoreSession
       .execute()
