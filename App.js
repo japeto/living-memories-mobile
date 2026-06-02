@@ -7,7 +7,7 @@ import { Lora_500Medium, Lora_500Medium_Italic } from '@expo-google-fonts/lora';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { ThemeProvider } from './src/presentation/theme/ThemeProvider';
-import { AuthNavigator } from './src/presentation/navigation/AuthNavigator';
+import { MainNavigator } from './src/presentation/navigation/MainNavigator';
 import { SplashScreen } from './src/presentation/screens/SplashScreen';
 import './src/di/container';
 
@@ -44,7 +44,7 @@ export default function App() {
           <SplashScreen onDone={() => setShowSplash(false)} />
         ) : (
           <NavigationContainer>
-            <AuthNavigator />
+            <MainNavigator />
           </NavigationContainer>
         )}
       </View>
