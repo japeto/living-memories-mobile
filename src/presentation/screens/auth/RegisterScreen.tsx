@@ -97,7 +97,6 @@ export function RegisterScreen() {
             loading={vm.isLoading}
             disabled={vm.isLoading || !vm.name || !vm.email || vm.pin.length < 4 || !vm.agree}
             style={{ marginTop: 12 }}
-            iconRight="arrow"
           >
             Registrarme
           </Button>

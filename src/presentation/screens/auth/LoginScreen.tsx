@@ -63,7 +63,6 @@ export function LoginScreen() {
             loading={vm.isLoading}
             disabled={vm.isLoading || !vm.email || vm.pin.length < 4}
             style={{ marginTop: 12 }}
-            iconRight="arrow"
           >
             Ingresar
           </Button>
