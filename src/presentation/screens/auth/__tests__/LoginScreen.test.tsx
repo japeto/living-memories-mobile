@@ -74,6 +74,7 @@ const mockViewModel = {
   pin: '',
   setPin: jest.fn(),
   isLoading: false,
+  serverError: '',
   onLogin: jest.fn(),
   navigateToRegister: jest.fn(),
   emailError: '',

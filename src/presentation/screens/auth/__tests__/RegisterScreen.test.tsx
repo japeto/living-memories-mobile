@@ -82,6 +82,7 @@ const mockViewModel = {
   agree: false,
   setAgree: jest.fn(),
   isLoading: false,
+  serverError: '',
   onRegister: jest.fn(),
   navigateToLogin: jest.fn(),
   goBack: jest.fn(),

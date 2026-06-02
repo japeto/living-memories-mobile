@@ -8,6 +8,29 @@ jest.mock('../../../providers/AuthProvider', () => ({
   }),
 }));
 
+const mockRegisterExecute = jest.fn();
+jest.mock('../../../../di/container', () => ({
+  container: {
+    resolve: jest.fn((token: unknown) => {
+      const { RegisterUseCase } = require('../../../../domain/auth/useCases/RegisterUseCase');
+      if (token === RegisterUseCase) {
+        return { execute: mockRegisterExecute };
+      }
+      return {};
+    }),
+  },
+}));
+
+jest.mock('expo-constants', () => ({
+  default: { expoConfig: { extra: { apiBaseUrl: 'http://localhost:8000' } } },
+}));
+
+jest.mock('expo-secure-store', () => ({
+  getItemAsync: jest.fn().mockResolvedValue(null),
+  setItemAsync: jest.fn().mockResolvedValue(undefined),
+  deleteItemAsync: jest.fn().mockResolvedValue(undefined),
+}));
+
 describe('useRegisterViewModel', () => {
   const mockNavigation = {
     navigate: jest.fn(),
@@ -17,11 +40,6 @@ describe('useRegisterViewModel', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.useFakeTimers();
-  });
-
-  afterEach(() => {
-    jest.useRealTimers();
   });
 
   it('should initialize with default values', () => {
@@ -32,6 +50,7 @@ describe('useRegisterViewModel', () => {
     expect(result.current.pin).toBe('');
     expect(result.current.agree).toBe(false);
     expect(result.current.isLoading).toBe(false);
+    expect(result.current.serverError).toBe('');
     expect(result.current.nameError).toBe('');
     expect(result.current.emailError).toBe('');
     expect(result.current.pinError).toBe('');
@@ -74,7 +93,6 @@ describe('useRegisterViewModel', () => {
     });
     expect(result.current.pin).toBe('1234');
 
-    // Trying to add a 5th digit does nothing since length check fails
     act(() => {
       result.current.setPin('12345');
     });
@@ -148,7 +166,7 @@ describe('useRegisterViewModel', () => {
       expect(result.current.pinError).toBe('El PIN debe tener 4 dígitos.');
 
       act(() => {
-        result.current.setPin('4321'); // Weak pin
+        result.current.setPin('4321');
       });
       act(() => {
         result.current.validatePin();
@@ -156,7 +174,7 @@ describe('useRegisterViewModel', () => {
       expect(result.current.pinError).toBe('El PIN es demasiado fácil de adivinar.');
 
       act(() => {
-        result.current.setPin('5678'); // Good pin
+        result.current.setPin('5678');
       });
       act(() => {
         result.current.validatePin();
@@ -212,9 +230,12 @@ describe('useRegisterViewModel', () => {
       await result.current.onRegister();
     });
     expect(result.current.isLoading).toBe(false);
+    expect(mockRegisterExecute).not.toHaveBeenCalled();
   });
 
   it('should register successfully when fields are valid and agree is true', async () => {
+    mockRegisterExecute.mockResolvedValueOnce({ userId: 'user-123' });
+
     const { result } = renderHook(() => useRegisterViewModel(mockNavigation));
 
     act(() => {
@@ -225,14 +246,32 @@ describe('useRegisterViewModel', () => {
     });
 
     await act(async () => {
-      const registerPromise = result.current.onRegister();
-      jest.advanceTimersByTime(1500);
-      await registerPromise;
+      await result.current.onRegister();
     });
 
     expect(result.current.isLoading).toBe(false);
-    expect(result.current.nameError).toBe('');
-    expect(result.current.emailError).toBe('');
-    expect(result.current.pinError).toBe('');
+    expect(result.current.serverError).toBe('');
+    expect(mockLogin).toHaveBeenCalledWith('user-123');
+  });
+
+  it('should set serverError when register fails with API error', async () => {
+    mockRegisterExecute.mockRejectedValueOnce({ message: 'El correo ya está registrado', status: 409 });
+
+    const { result } = renderHook(() => useRegisterViewModel(mockNavigation));
+
+    act(() => {
+      result.current.setName('Juan');
+      result.current.setEmail('valid@example.com');
+      result.current.setPin('5678');
+      result.current.setAgree(true);
+    });
+
+    await act(async () => {
+      await result.current.onRegister();
+    });
+
+    expect(result.current.serverError).toBe('El correo ya está registrado');
+    expect(result.current.isLoading).toBe(false);
+    expect(mockLogin).not.toHaveBeenCalled();
   });
 });
