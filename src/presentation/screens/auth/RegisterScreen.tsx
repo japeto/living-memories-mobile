@@ -106,6 +106,15 @@ export function RegisterScreen() {
           >
             Registrarme
           </Button>
+
+          {!!vm.serverError && (
+            <Text
+              variant="body"
+              style={{ color: '#C0392B', textAlign: 'center', marginTop: 8 }}
+            >
+              {vm.serverError}
+            </Text>
+          )}
         </View>
 
         <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 32 }}>

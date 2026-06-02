@@ -1,5 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../providers/AuthProvider';
+import { container } from '../../../di/container';
+import { LoginUseCase } from '../../../domain/auth/useCases/LoginUseCase';
+import { AUTH_TOKENS } from '../../../di/tokens';
+import type { IAuthRepository } from '../../../domain/auth/repositories/IAuthRepository';
+import { ApiError } from '../../../data/network/apiClient';
 
 export interface LoginViewModel {
   email: string;
@@ -7,6 +12,7 @@ export interface LoginViewModel {
   pin: string;
   setPin: (pin: string) => void;
   isLoading: boolean;
+  serverError: string;
   onLogin: () => Promise<void>;
   navigateToRegister: () => void;
   emailError: string;
@@ -19,9 +25,17 @@ export function useLoginViewModel(navigation: any): LoginViewModel {
   const [email, setEmailState] = useState('');
   const [pin, setPinState] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [serverError, setServerError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [pinError, setPinError] = useState('');
   const { login } = useAuth();
+
+  useEffect(() => {
+    const repo = container.resolve<IAuthRepository>(AUTH_TOKENS.IAuthRepository);
+    repo.getStoredEmail().then((storedEmail) => {
+      if (storedEmail) setEmailState(storedEmail);
+    });
+  }, []);
 
   const validateEmail = () => {
     if (!email) {
@@ -56,13 +70,20 @@ export function useLoginViewModel(navigation: any): LoginViewModel {
     if (!isEmailValid || !isPinValid) {
       return;
     }
+
     setIsLoading(true);
-    // Mock login delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setIsLoading(false);
-    
-    // Trigger authentication state update
-    login();
+    setServerError('');
+
+    try {
+      const loginUseCase = container.resolve(LoginUseCase);
+      const user = await loginUseCase.execute(email, pin);
+      login(user.userId);
+    } catch (error) {
+      const apiError = error as ApiError;
+      setServerError(apiError.message ?? 'Error al iniciar sesión. Intenta de nuevo.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const navigateToRegister = () => {
@@ -77,7 +98,6 @@ export function useLoginViewModel(navigation: any): LoginViewModel {
     },
     pin,
     setPin: (newPin) => {
-      // Allow only numbers and up to 4 digits
       const numericPin = newPin.replace(/[^0-9]/g, '');
       if (numericPin.length <= 4) {
         setPinState(numericPin);
@@ -85,6 +105,7 @@ export function useLoginViewModel(navigation: any): LoginViewModel {
       }
     },
     isLoading,
+    serverError,
     onLogin,
     navigateToRegister,
     emailError,
