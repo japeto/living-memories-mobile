@@ -25,7 +25,7 @@ export function AuthHeader({ title, subtitle, onBack }: AuthHeaderProps) {
               left: 0,
               padding: 8,
               marginLeft: -8,
-              borderRadius: t.radius.full,
+              borderRadius: t.radius.pill,
             }}
           >
             <Icon name="back" size={28} color={t.colors.ink} />

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { container } from 'tsyringe';
-import { TestUseCase } from '../../domain/useCases/TestUseCase';
+import { TestUseCase } from '../../domain/test/useCases/TestUseCase';
 
 export function useTestViewModel() {
   const [message, setMessage] = useState<string>('');

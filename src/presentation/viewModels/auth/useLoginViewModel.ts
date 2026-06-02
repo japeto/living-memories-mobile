@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAuth } from '../../providers/AuthProvider';
 
 export interface LoginViewModel {
   email: string;
@@ -20,6 +21,7 @@ export function useLoginViewModel(navigation: any): LoginViewModel {
   const [isLoading, setIsLoading] = useState(false);
   const [emailError, setEmailError] = useState('');
   const [pinError, setPinError] = useState('');
+  const { login } = useAuth();
 
   const validateEmail = () => {
     if (!email) {
@@ -59,8 +61,8 @@ export function useLoginViewModel(navigation: any): LoginViewModel {
     await new Promise(resolve => setTimeout(resolve, 1500));
     setIsLoading(false);
     
-    // In the future: replace this with actual auth state update
-    // e.g. authContext.login()
+    // Trigger authentication state update
+    login();
   };
 
   const navigateToRegister = () => {

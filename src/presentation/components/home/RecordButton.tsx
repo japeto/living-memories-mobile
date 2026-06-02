@@ -86,7 +86,7 @@ export function RecordButton({ phase, onPress }: RecordButtonProps) {
       >
         <MaterialCommunityIcons
           name={getIcon()}
-          size={36}
+          size={56}
           color={phase === 'proc' ? theme.colors.onSurfaceVariant : theme.colors.onPrimary}
         />
       </TouchableOpacity>
@@ -98,20 +98,20 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: 120,
-    height: 120,
+    width: 200,
+    height: 200,
   },
   pulseRing: {
     position: 'absolute',
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 180,
+    height: 180,
+    borderRadius: 90,
     opacity: 0.3,
   },
   button: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 140,
+    height: 140,
+    borderRadius: 70,
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 4,

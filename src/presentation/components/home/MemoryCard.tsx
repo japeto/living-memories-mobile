@@ -54,7 +54,6 @@ export function MemoryCard({ memory, isNew }: MemoryCardProps) {
 
 const styles = StyleSheet.create({
   card: {
-    marginHorizontal: 16,
     marginBottom: 16,
     borderRadius: 16,
   },

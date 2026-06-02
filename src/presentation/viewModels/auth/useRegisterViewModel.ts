@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAuth } from '../../providers/AuthProvider';
 
 export interface RegisterViewModel {
   name: string;
@@ -27,6 +28,7 @@ export function useRegisterViewModel(navigation: any): RegisterViewModel {
   const [pin, setPinState] = useState('');
   const [agree, setAgree] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth();
 
   const [nameError, setNameError] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -91,7 +93,8 @@ export function useRegisterViewModel(navigation: any): RegisterViewModel {
     await new Promise(resolve => setTimeout(resolve, 1500));
     setIsLoading(false);
     
-    // In the future: replace this with actual register flow
+    // Trigger authentication state update
+    login();
   };
 
   const navigateToLogin = () => {
