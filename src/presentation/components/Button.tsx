@@ -18,6 +18,7 @@ export interface ButtonProps {
   block?: boolean;          // full width
   onPress?: () => void;
   disabled?: boolean;
+  loading?: boolean;
   style?: StyleProp<ViewStyle>;
 }
 

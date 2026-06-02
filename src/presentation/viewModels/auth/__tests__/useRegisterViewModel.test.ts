@@ -1,6 +1,13 @@
 import { renderHook, act } from '@testing-library/react-hooks';
 import { useRegisterViewModel } from '../useRegisterViewModel';
 
+const mockLogin = jest.fn();
+jest.mock('../../../providers/AuthProvider', () => ({
+  useAuth: () => ({
+    login: mockLogin,
+  }),
+}));
+
 describe('useRegisterViewModel', () => {
   const mockNavigation = {
     navigate: jest.fn(),

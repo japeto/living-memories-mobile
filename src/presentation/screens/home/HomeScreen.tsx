@@ -22,10 +22,10 @@ export function HomeScreen() {
             {dateStr}
           </Text>
           <Text variant="headlineMedium" style={styles.greeting}>
-            Buenos días, Rosa
+            Buenos días, <Text style={{ color: theme.colors.primary, fontWeight: 'bold' }}>Rosa</Text>
           </Text>
         </View>
-        <Avatar.Image size={48} source={{ uri: 'https://i.pravatar.cc/150?img=47' }} />
+        <Avatar.Icon size={48} icon="account-outline" color="#407062" style={{ backgroundColor: '#E3EFEC' }} />
       </View>
 
       <RecordingHero
@@ -51,8 +51,16 @@ export function HomeScreen() {
         <FlatList
           data={vm.memories}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <MemoryCard memory={item} isNew={item.id === vm.newId} />
+          renderItem={({ item, index }) => (
+            <View style={styles.timelineRow}>
+              <View style={styles.timelineColumn}>
+                <View style={[styles.timelineDot, { backgroundColor: item.id === vm.newId ? theme.colors.primary : '#6A9084' }]} />
+                {index !== vm.memories.length - 1 && <View style={styles.timelineLine} />}
+              </View>
+              <View style={styles.timelineCard}>
+                <MemoryCard memory={item} isNew={item.id === vm.newId} />
+              </View>
+            </View>
           )}
           ListHeaderComponent={renderHeader}
           contentContainerStyle={styles.listContent}
@@ -93,5 +101,30 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingBottom: 24,
+  },
+  timelineRow: {
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+  },
+  timelineColumn: {
+    width: 24,
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  timelineDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    marginTop: 24,
+  },
+  timelineLine: {
+    width: 2,
+    flex: 1,
+    backgroundColor: '#E2DCD0',
+    marginTop: 8,
+    marginBottom: -24,
+  },
+  timelineCard: {
+    flex: 1,
   }
 });

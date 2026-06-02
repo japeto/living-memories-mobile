@@ -50,17 +50,13 @@ export function RecordingHero({ phase, seconds, onToggle, layerStep }: Recording
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.surfaceVariant }]}>
-      
-      {phase !== 'proc' ? (
+    <View style={styles.container}>
+      {phase === 'idle' || phase === 'rec' ? (
         <View style={styles.recordContent}>
-          <Text variant="bodyLarge" style={[styles.helperText, { color: theme.colors.onSurfaceVariant }]}>
-            {phase === 'idle' ? 'Toca para grabar un recuerdo' : 'Te escucho...'}
-          </Text>
-          <Text variant="displayMedium" style={[styles.timer, { color: phase === 'rec' ? theme.colors.error : theme.colors.onSurfaceVariant }]}>
-            {formatTime(seconds)}
-          </Text>
           <RecordButton phase={phase} onPress={onToggle} />
+          <Text variant="bodyLarge" style={styles.helperText}>
+            Toca para grabar un recuerdo
+          </Text>
         </View>
       ) : (
         <View style={styles.procContent}>
@@ -114,10 +110,10 @@ export function RecordingHero({ phase, seconds, onToggle, layerStep }: Recording
 
 const styles = StyleSheet.create({
   container: {
-    margin: 16,
-    borderRadius: 24,
-    padding: 24,
-    minHeight: 280,
+    marginHorizontal: 16,
+    marginTop: 16,
+    marginBottom: 24,
+    minHeight: 200,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -125,12 +121,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   helperText: {
-    marginBottom: 8,
-    opacity: 0.8,
-  },
-  timer: {
-    marginBottom: 24,
-    fontWeight: '300',
+    marginTop: 24,
+    opacity: 0.6,
   },
   procContent: {
     width: '100%',

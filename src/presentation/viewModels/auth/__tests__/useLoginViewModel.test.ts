@@ -1,6 +1,13 @@
 import { renderHook, act } from '@testing-library/react-hooks';
 import { useLoginViewModel } from '../useLoginViewModel';
 
+const mockLogin = jest.fn();
+jest.mock('../../../providers/AuthProvider', () => ({
+  useAuth: () => ({
+    login: mockLogin,
+  }),
+}));
+
 describe('useLoginViewModel', () => {
   const mockNavigation = {
     navigate: jest.fn(),
