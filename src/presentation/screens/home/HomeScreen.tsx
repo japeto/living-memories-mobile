@@ -2,6 +2,10 @@ import React from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import { Text, Avatar, useTheme, ActivityIndicator } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { TouchableRipple } from 'react-native-paper';
+import { AppStackParamList } from '../../navigation/AppNavigator';
 import { useHomeViewModel } from '../../viewModels/home/useHomeViewModel';
 import { RecordingHero } from '../../components/home/RecordingHero';
 import { MemoryCard } from '../../components/home/MemoryCard';
@@ -9,6 +13,7 @@ import { MemoryCard } from '../../components/home/MemoryCard';
 export function HomeScreen() {
   const theme = useTheme();
   const vm = useHomeViewModel();
+  const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>();
 
   // Capitalize first letter helper
   const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -25,7 +30,9 @@ export function HomeScreen() {
             Buenos días, <Text style={{ color: theme.colors.primary, fontWeight: 'bold' }}>Rosa</Text>
           </Text>
         </View>
-        <Avatar.Icon size={48} icon="account-outline" color="#407062" style={{ backgroundColor: '#E3EFEC' }} />
+        <TouchableRipple onPress={() => navigation.navigate('Profile')} style={{ borderRadius: 24 }} borderless>
+          <Avatar.Icon size={48} icon="account-outline" color="#407062" style={{ backgroundColor: '#E3EFEC' }} />
+        </TouchableRipple>
       </View>
 
       <RecordingHero
