@@ -4,7 +4,10 @@
   },
   "build": {
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "env": {
+        "API_BASE_URL": "https://living-memories-api.onrender.com"
+      }
     }
   }
 }
