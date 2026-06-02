@@ -13,12 +13,11 @@ export function SplashScreen({ onDone }: SplashScreenProps) {
   const float = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    // Pop-in animation
-    Animated.spring(pop, {
+    // Smooth fade-in animation
+    Animated.timing(pop, {
       toValue: 1,
+      duration: 800,
       useNativeDriver: true,
-      bounciness: 12,
-      speed: 14,
     }).start();
 
     // Float looping animation
@@ -45,7 +44,6 @@ export function SplashScreen({ onDone }: SplashScreenProps) {
               {
                 opacity: pop,
                 transform: [
-                  { scale: pop },
                   {
                     translateY: float.interpolate({
                       inputRange: [0, 1],
