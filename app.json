@@ -14,7 +14,8 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.iaderegg.recuerdovivo"
+      "bundleIdentifier": "com.iaderegg.recuerdovivo",
+      "userInterfaceStyle": "light"
     },
     "android": {
       "adaptiveIcon": {
