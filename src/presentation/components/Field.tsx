@@ -13,9 +13,10 @@ export interface FieldProps extends Omit<TextInputProps, 'style'> {
   label?: string;
   icon?: IconName;
   secureTextEntry?: boolean;   // shows the eye toggle
+  error?: string;
 }
 
-export function Field({ label, icon, secureTextEntry, ...rest }: FieldProps) {
+export function Field({ label, icon, secureTextEntry, error, ...rest }: FieldProps) {
   const t = useTheme();
   const [focus, setFocus] = useState(false);
   const [show, setShow] = useState(false);
@@ -38,7 +39,7 @@ export function Field({ label, icon, secureTextEntry, ...rest }: FieldProps) {
           borderRadius: t.radius.md,
           backgroundColor: t.colors.surface,
           borderWidth: focus ? 2.5 : 2,
-          borderColor: focus ? t.colors.primary : t.colors.line,
+          borderColor: error ? t.colors.error : focus ? t.colors.primary : t.colors.line,
         }}
       >
         {icon && (
@@ -66,6 +67,11 @@ export function Field({ label, icon, secureTextEntry, ...rest }: FieldProps) {
           </Pressable>
         )}
       </View>
+      {error ? (
+        <Text variant="small" style={{ color: t.colors.error, paddingLeft: 4 }}>
+          {error}
+        </Text>
+      ) : null}
     </View>
   );
 }

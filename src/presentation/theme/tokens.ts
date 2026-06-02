@@ -25,6 +25,7 @@ export interface Palette {
   accentSoft: string;
   heroFrom: string;
   heroTo: string;
+  error: string;
 }
 
 export const themes: Record<ThemeName, Palette> = {
@@ -48,6 +49,7 @@ export const themes: Record<ThemeName, Palette> = {
     accentSoft: '#f6e8c9',
     heroFrom: '#f4ece0',
     heroTo: '#efe0cd',
+    error: '#B3261E',
   },
   /* THEME B · Serene (wellness, sage) */
   sereno: {
@@ -69,6 +71,7 @@ export const themes: Record<ThemeName, Palette> = {
     accentSoft: '#efe6cd',
     heroFrom: '#eef1ec',
     heroTo: '#e3ebe4',
+    error: '#B3261E',
   },
   /* THEME C · Sunset (deep warm) */
   atardecer: {
@@ -90,6 +93,7 @@ export const themes: Record<ThemeName, Palette> = {
     accentSoft: '#f8e3c2',
     heroFrom: '#f8ead6',
     heroTo: '#f3d3b4',
+    error: '#B3261E',
   },
 };
 

@@ -45,6 +45,8 @@ export function LoginScreen() {
             keyboardType="email-address"
             autoCapitalize="none"
             placeholder="ejemplo@correo.com"
+            error={vm.emailError}
+            onBlur={vm.validateEmail}
           />
 
           <Field
@@ -56,6 +58,8 @@ export function LoginScreen() {
             keyboardType="numeric"
             maxLength={4}
             placeholder="****"
+            error={vm.pinError}
+            onBlur={vm.validatePin}
           />
 
           <Button
