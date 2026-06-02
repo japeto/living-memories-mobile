@@ -2,7 +2,7 @@ import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { useAuth } from '../providers/AuthProvider';
-import { MainNavigator } from './MainNavigator';
+import { AppNavigator } from './AppNavigator';
 import { AuthNavigator } from './AuthNavigator';
 
 export const RootNavigator = () => {
@@ -18,7 +18,7 @@ export const RootNavigator = () => {
 
   return (
     <NavigationContainer>
-      {isAuthenticated ? <MainNavigator /> : <AuthNavigator />}
+      {isAuthenticated ? <AppNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );
 };
