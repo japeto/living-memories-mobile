@@ -234,7 +234,7 @@ describe('useRegisterViewModel', () => {
   });
 
   it('should register successfully when fields are valid and agree is true', async () => {
-    mockRegisterExecute.mockResolvedValueOnce({ userId: 'user-123' });
+    mockRegisterExecute.mockResolvedValueOnce({ userId: 'user-123', displayName: 'Juan' });
 
     const { result } = renderHook(() => useRegisterViewModel(mockNavigation));
 
@@ -251,7 +251,7 @@ describe('useRegisterViewModel', () => {
 
     expect(result.current.isLoading).toBe(false);
     expect(result.current.serverError).toBe('');
-    expect(mockLogin).toHaveBeenCalledWith('user-123');
+    expect(mockLogin).toHaveBeenCalledWith('user-123', 'Juan');
   });
 
   it('should set serverError when register fails with API error', async () => {

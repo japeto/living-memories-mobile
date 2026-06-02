@@ -77,7 +77,7 @@ export function useLoginViewModel(navigation: any): LoginViewModel {
     try {
       const loginUseCase = container.resolve(LoginUseCase);
       const user = await loginUseCase.execute(email, pin);
-      login(user.userId);
+      login(user.userId, user.displayName);
     } catch (error) {
       const apiError = error as ApiError;
       setServerError(apiError.message ?? 'Error al iniciar sesión. Intenta de nuevo.');

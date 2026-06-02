@@ -50,7 +50,8 @@ describe('AuthRepository', () => {
       });
       expect(SecureStore.setItemAsync).toHaveBeenCalledWith('auth_access_token', 'access-123');
       expect(SecureStore.setItemAsync).toHaveBeenCalledWith('auth_refresh_token', 'refresh-123');
-      expect(result).toEqual({ userId: 'user-123' });
+      expect(SecureStore.setItemAsync).toHaveBeenCalledWith('auth_display_name', 'Test');
+      expect(result).toEqual({ userId: 'user-123', displayName: 'Test' });
     });
   });
 
@@ -61,6 +62,7 @@ describe('AuthRepository', () => {
         data: {
           authenticated: true,
           user_id: 'user-123',
+          display_name: 'Juan',
           access_token: 'access-123',
           refresh_token: 'refresh-123',
           token_type: 'bearer',
@@ -78,7 +80,8 @@ describe('AuthRepository', () => {
       });
       expect(SecureStore.setItemAsync).toHaveBeenCalledWith('auth_access_token', 'access-123');
       expect(SecureStore.setItemAsync).toHaveBeenCalledWith('auth_refresh_token', 'refresh-123');
-      expect(result).toEqual({ userId: 'user-123' });
+      expect(SecureStore.setItemAsync).toHaveBeenCalledWith('auth_display_name', 'Juan');
+      expect(result).toEqual({ userId: 'user-123', displayName: 'Juan' });
     });
   });
 
@@ -88,6 +91,7 @@ describe('AuthRepository', () => {
       (SecureStore.getItemAsync as jest.Mock).mockImplementation((key) => {
         if (key === 'auth_user_id') return Promise.resolve('user-123');
         if (key === 'auth_refresh_token') return Promise.resolve('refresh-123');
+        if (key === 'auth_display_name') return Promise.resolve('Juan');
         return Promise.resolve(null);
       });
 
@@ -95,7 +99,7 @@ describe('AuthRepository', () => {
       const result = await repository.getStoredSession();
 
       // Assert
-      expect(result).toEqual({ userId: 'user-123' });
+      expect(result).toEqual({ userId: 'user-123', displayName: 'Juan' });
     });
 
     it('should return null if refreshToken is missing', async () => {
@@ -117,10 +121,11 @@ describe('AuthRepository', () => {
   describe('saveSession', () => {
     it('should save userId to store', async () => {
       // Act
-      await repository.saveSession({ userId: 'user-123' });
+      await repository.saveSession({ userId: 'user-123', displayName: 'Juan' });
 
       // Assert
       expect(SecureStore.setItemAsync).toHaveBeenCalledWith('auth_user_id', 'user-123');
+      expect(SecureStore.setItemAsync).toHaveBeenCalledWith('auth_display_name', 'Juan');
     });
   });
 
@@ -138,6 +143,7 @@ describe('AuthRepository', () => {
       expect(SecureStore.deleteItemAsync).toHaveBeenCalledWith('auth_email');
       expect(SecureStore.deleteItemAsync).toHaveBeenCalledWith('auth_access_token');
       expect(SecureStore.deleteItemAsync).toHaveBeenCalledWith('auth_refresh_token');
+      expect(SecureStore.deleteItemAsync).toHaveBeenCalledWith('auth_display_name');
     });
 
     it('should clear stored items even if logout request fails', async () => {

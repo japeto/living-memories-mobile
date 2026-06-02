@@ -16,8 +16,10 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.iaderegg.recuerdovivo",
       "userInterfaceStyle": "light",
+      "buildNumber": "1",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSMicrophoneUsageDescription": "Recuerdo Vivo necesita acceso al micrófono para grabar tus memorias."
       }
     },
     "android": {

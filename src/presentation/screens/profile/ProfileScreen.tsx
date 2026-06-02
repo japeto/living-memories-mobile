@@ -2,11 +2,13 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, Avatar, Button, useTheme, Appbar } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../../providers/AuthProvider';
 import { useProfileViewModel } from '../../viewModels/profile/useProfileViewModel';
 
 export function ProfileScreen() {
   const theme = useTheme();
   const navigation = useNavigation();
+  const { userName } = useAuth();
   const { handleLogout } = useProfileViewModel();
 
   return (
@@ -19,7 +21,7 @@ export function ProfileScreen() {
       <View style={styles.content}>
         <View style={styles.header}>
           <Avatar.Icon size={80} icon="account" color="#407062" style={{ backgroundColor: '#E3EFEC' }} />
-          <Text variant="headlineMedium" style={styles.name}>Rosa</Text>
+          <Text variant="headlineMedium" style={styles.name}>{userName || 'Usuario'}</Text>
         </View>
         
         <View style={styles.actions}>

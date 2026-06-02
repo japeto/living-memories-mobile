@@ -134,7 +134,7 @@ describe('useLoginViewModel', () => {
   });
 
   it('should login successfully when stored userId exists', async () => {
-    mockLoginExecute.mockResolvedValueOnce({ userId: 'stored-user-id' });
+    mockLoginExecute.mockResolvedValueOnce({ userId: 'stored-user-id', displayName: 'Juan' });
     const { result } = renderHook(() => useLoginViewModel(mockNavigation));
     act(() => {
       result.current.setEmail('test@example.com');
@@ -143,7 +143,7 @@ describe('useLoginViewModel', () => {
     await act(async () => { await result.current.onLogin(); });
     expect(result.current.serverError).toBe('');
     expect(result.current.isLoading).toBe(false);
-    expect(mockLogin).toHaveBeenCalledWith('stored-user-id');
+    expect(mockLogin).toHaveBeenCalledWith('stored-user-id', 'Juan');
   });
 
   it('should set serverError when login API fails', async () => {

@@ -100,7 +100,7 @@ export function useRegisterViewModel(navigation: any): RegisterViewModel {
     try {
       const registerUseCase = container.resolve(RegisterUseCase);
       const user = await registerUseCase.execute(name, email, pin);
-      login(user.userId);
+      login(user.userId, user.displayName);
     } catch (error) {
       const apiError = error as ApiError;
       setServerError(apiError.message ?? 'Error al registrarse. Intenta de nuevo.');
