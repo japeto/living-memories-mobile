@@ -20,7 +20,7 @@ export function RegisterScreen() {
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1, backgroundColor: t.colors.background }}
+      style={{ flex: 1, backgroundColor: t.colors.bg }}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <ScrollView

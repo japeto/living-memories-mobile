@@ -15,6 +15,20 @@ export function AuthHeader({ title, subtitle, onBack }: AuthHeaderProps) {
 
   return (
     <View style={{ marginBottom: 32, gap: 8 }}>
+      <View
+        style={{
+          width: 48,
+          height: 48,
+          marginBottom: 16,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <View style={{ position: 'absolute', width: 48, height: 48, borderRadius: 24, borderWidth: 1.5, borderColor: t.colors.accent, opacity: 0.4 }} />
+        <View style={{ position: 'absolute', width: 36, height: 36, borderRadius: 18, borderWidth: 1.5, borderColor: t.colors.secondary, opacity: 0.5 }} />
+        <View style={{ position: 'absolute', width: 24, height: 24, borderRadius: 12, borderWidth: 1, borderColor: t.colors.primary, opacity: 0.15 }} />
+        <View style={{ position: 'absolute', width: 12, height: 12, borderRadius: 6, backgroundColor: t.colors.primary }} />
+      </View>
       {onBack && (
         <Pressable 
           onPress={onBack} 
@@ -30,7 +44,7 @@ export function AuthHeader({ title, subtitle, onBack }: AuthHeaderProps) {
           <Icon name="back" size={28} color={t.colors.ink} />
         </Pressable>
       )}
-      <Text variant="heading" style={{ fontSize: 32 }}>
+      <Text variant="h1" style={{ fontSize: 32 }}>
         {title}
       </Text>
       {subtitle && (

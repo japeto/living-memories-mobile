@@ -44,11 +44,11 @@ export function Button({
     soft: { backgroundColor: t.colors.surface, ...t.shadow.card },
     text: { backgroundColor: 'transparent' },
   };
-  const labelColor: Record<Variant, string> = {
-    primary: t.colors.onPrimary,
-    ghost: t.colors.ink,
-    soft: t.colors.ink,
-    text: t.colors.primary,
+  const labelTone: Record<Variant, 'onPrimary' | 'ink' | 'primary'> = {
+    primary: 'onPrimary',
+    ghost: 'ink',
+    soft: 'ink',
+    text: 'primary',
   };
 
   return (
@@ -73,11 +73,11 @@ export function Button({
       >
         {icon && (
           <View style={{ marginRight: 10 }}>
-            <Icon name={icon} size={22} strokeWidth={2.4} color={labelColor[variant]} />
+            <Icon name={icon} size={22} strokeWidth={2.4} color={t.colors[labelTone[variant]]} />
           </View>
         )}
         {typeof children === 'string' ? (
-          <Text variant="h3" color={labelColor[variant]} style={{ fontWeight: '800', fontSize: 19 }}>
+          <Text variant="h3" tone={labelTone[variant]} style={{ fontWeight: '800', fontSize: 19 }}>
             {children}
           </Text>
         ) : (
@@ -85,7 +85,7 @@ export function Button({
         )}
         {iconRight && (
           <View style={{ marginLeft: 10 }}>
-            <Icon name={iconRight} size={22} strokeWidth={2.4} color={labelColor[variant]} />
+            <Icon name={iconRight} size={22} strokeWidth={2.4} color={t.colors[labelTone[variant]]} />
           </View>
         )}
       </Pressable>
