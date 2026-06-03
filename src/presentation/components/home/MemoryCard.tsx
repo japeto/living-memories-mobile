@@ -116,5 +116,6 @@ const styles = StyleSheet.create({
   },
   reminderText: {
     marginLeft: 8,
+    flex: 1,
   },
 });

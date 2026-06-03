@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import { Text, Avatar, useTheme, ActivityIndicator } from 'react-native-paper';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -24,7 +25,7 @@ export function HomeScreen() {
   const renderHeader = () => (
     <View>
       <View style={styles.topBar}>
-        <View>
+        <View style={{ flex: 1, marginRight: 16 }}>
           <Text variant="labelLarge" style={{ color: theme.colors.outline }}>
             {dateStr}
           </Text>
@@ -41,7 +42,6 @@ export function HomeScreen() {
         phase={vm.phase}
         seconds={vm.seconds}
         onToggle={vm.onToggleRecord}
-        layerStep={vm.layerStep}
         liveText={vm.liveText}
       />
 
@@ -73,6 +73,14 @@ export function HomeScreen() {
             </View>
           )}
           ListHeaderComponent={renderHeader}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <MaterialCommunityIcons name="notebook-outline" size={48} color={theme.colors.outline} />
+              <Text variant="bodyLarge" style={[styles.emptyText, { color: theme.colors.outline }]}>
+                No tienes notas, guarda tu primer recuerdo
+              </Text>
+            </View>
+          }
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
         />
@@ -136,5 +144,14 @@ const styles = StyleSheet.create({
   },
   timelineCard: {
     flex: 1,
+  },
+  emptyContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 48,
+  },
+  emptyText: {
+    textAlign: 'center',
+    marginTop: 16,
   }
 });
