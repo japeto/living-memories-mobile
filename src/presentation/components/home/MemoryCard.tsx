@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Card, Text, Chip, useTheme } from 'react-native-paper';
+import { Card, Text, Chip, useTheme, ActivityIndicator } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Memory } from '../../../domain/memories/entities/Memory';
 
