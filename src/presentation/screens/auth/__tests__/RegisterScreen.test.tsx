@@ -1,0 +1,207 @@
+import React from 'react';
+import { render, fireEvent } from '@testing-library/react-native';
+import { RegisterScreen } from '../RegisterScreen';
+import { useRegisterViewModel } from '../../../viewModels/auth/useRegisterViewModel';
+
+// Mock theme and navigation
+jest.mock('../../../theme/ThemeProvider', () => ({
+  useTheme: () => ({
+    colors: { background: '#FFF', primary: '#00F', line: '#EEE', error: '#F00' },
+    radius: { full: 999 },
+  }),
+}));
+
+jest.mock('@react-navigation/native', () => ({
+  useNavigation: () => ({ navigate: jest.fn(), goBack: jest.fn() }),
+}));
+
+jest.mock('react-native-safe-area-context', () => ({
+  useSafeAreaInsets: () => ({ top: 0, bottom: 0 }),
+}));
+
+// Mock the ViewModel
+jest.mock('../../../viewModels/auth/useRegisterViewModel');
+
+// Mock components
+jest.mock('../../../components/AuthHeader', () => ({
+  AuthHeader: ({ title, subtitle, onBack }: any) => {
+    const { Text } = require('react-native');
+    return <Text onPress={onBack}>{title} {subtitle}</Text>;
+  },
+}));
+
+jest.mock('../../../components/Field', () => ({
+  Field: ({ label, value, onChangeText, onBlur, placeholder, error, ...props }: any) => {
+    const { TextInput, Text, View } = require('react-native');
+    return (
+      <View>
+        <TextInput
+          testID={`input-${label}`}
+          value={value}
+          onChangeText={onChangeText}
+          onBlur={onBlur}
+          placeholder={placeholder}
+          {...props}
+        />
+        {error ? <Text testID={`error-${label}`}>{error}</Text> : null}
+      </View>
+    );
+  },
+}));
+
+jest.mock('../../../components/Button', () => ({
+  Button: ({ children, title, onPress, disabled, loading }: any) => {
+    const { Pressable, Text } = require('react-native');
+    const label = children || title;
+    return (
+      <Pressable testID={`button-${label}`} onPress={onPress} disabled={disabled || loading}>
+        <Text>{loading ? 'Loading...' : label}</Text>
+      </Pressable>
+    );
+  },
+}));
+
+jest.mock('../../../components/Text', () => ({
+  Text: ({ children, onPress }: any) => {
+    const { Text: RNText } = require('react-native');
+    return <RNText onPress={onPress}>{children}</RNText>;
+  },
+}));
+
+jest.mock('../../../components/Icon', () => ({
+  Icon: () => null,
+}));
+
+const mockViewModel = {
+  name: '',
+  setName: jest.fn(),
+  email: '',
+  setEmail: jest.fn(),
+  pin: '',
+  setPin: jest.fn(),
+  agree: false,
+  setAgree: jest.fn(),
+  isLoading: false,
+  serverError: '',
+  onRegister: jest.fn(),
+  navigateToLogin: jest.fn(),
+  goBack: jest.fn(),
+  nameError: '',
+  emailError: '',
+  pinError: '',
+  validateName: jest.fn(),
+  validateEmail: jest.fn(),
+  validatePin: jest.fn(),
+};
+
+describe('RegisterScreen', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (useRegisterViewModel as jest.Mock).mockReturnValue(mockViewModel);
+  });
+
+  it('renders correctly', () => {
+    const { getByText, getByTestId } = render(<RegisterScreen />);
+    
+    expect(getByText('Crear cuenta Comienza a guardar tus memorias hoy')).toBeTruthy();
+    expect(getByTestId('input-Nombre completo')).toBeTruthy();
+    expect(getByTestId('input-Correo electrónico')).toBeTruthy();
+    expect(getByTestId('input-Crea un PIN (4 dígitos)')).toBeTruthy();
+    expect(getByTestId('button-Registrarme')).toBeTruthy();
+  });
+
+  it('updates fields when typed', () => {
+    const { getByTestId } = render(<RegisterScreen />);
+    
+    fireEvent.changeText(getByTestId('input-Nombre completo'), 'Juan');
+    expect(mockViewModel.setName).toHaveBeenCalledWith('Juan');
+
+    fireEvent.changeText(getByTestId('input-Correo electrónico'), 'juan@a.com');
+    expect(mockViewModel.setEmail).toHaveBeenCalledWith('juan@a.com');
+
+    fireEvent.changeText(getByTestId('input-Crea un PIN (4 dígitos)'), '1234');
+    expect(mockViewModel.setPin).toHaveBeenCalledWith('1234');
+  });
+
+  it('calls validation functions on blur', () => {
+    const { getByTestId } = render(<RegisterScreen />);
+    
+    fireEvent(getByTestId('input-Nombre completo'), 'blur');
+    expect(mockViewModel.validateName).toHaveBeenCalled();
+
+    fireEvent(getByTestId('input-Correo electrónico'), 'blur');
+    expect(mockViewModel.validateEmail).toHaveBeenCalled();
+
+    fireEvent(getByTestId('input-Crea un PIN (4 dígitos)'), 'blur');
+    expect(mockViewModel.validatePin).toHaveBeenCalled();
+  });
+
+  it('displays error messages when they are present', () => {
+    (useRegisterViewModel as jest.Mock).mockReturnValue({
+      ...mockViewModel,
+      nameError: 'Nombre inválido',
+      emailError: 'Correo inválido',
+      pinError: 'PIN inválido',
+    });
+
+    const { getByTestId, getByText } = render(<RegisterScreen />);
+    
+    expect(getByTestId('error-Nombre completo')).toBeTruthy();
+    expect(getByText('Nombre inválido')).toBeTruthy();
+
+    expect(getByTestId('error-Correo electrónico')).toBeTruthy();
+    expect(getByText('Correo inválido')).toBeTruthy();
+
+    expect(getByTestId('error-Crea un PIN (4 dígitos)')).toBeTruthy();
+    expect(getByText('PIN inválido')).toBeTruthy();
+  });
+
+  it('toggles terms agreement checkbox', () => {
+    const { getByText } = render(<RegisterScreen />);
+    const termsPressable = getByText('Acepto los términos y condiciones y política de privacidad');
+    
+    fireEvent.press(termsPressable);
+    expect(mockViewModel.setAgree).toHaveBeenCalledWith(true);
+  });
+
+  it('disables register button if form is invalid', () => {
+    const { getByTestId } = render(<RegisterScreen />);
+    const btn = getByTestId('button-Registrarme');
+    
+    fireEvent.press(btn);
+    expect(mockViewModel.onRegister).not.toHaveBeenCalled();
+    expect(btn.props.accessibilityState?.disabled).toBe(true);
+  });
+
+  it('calls onRegister when valid', () => {
+    (useRegisterViewModel as jest.Mock).mockReturnValue({
+      ...mockViewModel,
+      name: 'Juan',
+      email: 'juan@a.com',
+      pin: '1234',
+      agree: true,
+    });
+    
+    const { getByTestId } = render(<RegisterScreen />);
+    const btn = getByTestId('button-Registrarme');
+    
+    fireEvent.press(btn);
+    expect(mockViewModel.onRegister).toHaveBeenCalled();
+  });
+
+  it('navigates to Login when "Inicia sesión" is pressed', () => {
+    const { getByText } = render(<RegisterScreen />);
+    const loginLink = getByText('Inicia sesión');
+    
+    fireEvent.press(loginLink);
+    expect(mockViewModel.navigateToLogin).toHaveBeenCalled();
+  });
+
+  it('goes back when AuthHeader back is pressed', () => {
+    const { getByText } = render(<RegisterScreen />);
+    const backBtn = getByText('Crear cuenta Comienza a guardar tus memorias hoy'); // because we mocked AuthHeader as clickable title
+    
+    fireEvent.press(backBtn);
+    expect(mockViewModel.goBack).toHaveBeenCalled();
+  });
+});

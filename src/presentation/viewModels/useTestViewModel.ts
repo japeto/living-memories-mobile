@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { container } from 'tsyringe';
+import { TestUseCase } from '../../domain/test/useCases/TestUseCase';
 
-import { TestUseCase } from '../../domain/useCases/TestUseCase';
+export function useTestViewModel() {
+  const [message, setMessage] = useState<string>('');
 
-export const useTestViewModel = () => {
-  const [message] = useState(() => {
+  useEffect(() => {
+    // Resolve the use case from the DI container
     const testUseCase = container.resolve(TestUseCase);
-    return testUseCase.execute();
-  });
+    setMessage(testUseCase.execute());
+  }, []);
 
   return { message };
-};
+}
