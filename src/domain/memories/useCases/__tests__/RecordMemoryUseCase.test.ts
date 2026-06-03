@@ -1,0 +1,47 @@
+import 'reflect-metadata';
+import { RecordMemoryUseCase } from '../RecordMemoryUseCase';
+import { IMemoryRepository } from '../../repositories/IMemoryRepository';
+import { Memory } from '../../entities/Memory';
+
+describe('RecordMemoryUseCase', () => {
+  let useCase: RecordMemoryUseCase;
+  let mockMemoryRepository: jest.Mocked<IMemoryRepository>;
+
+  const mockMemory: Memory = {
+    id: 'mem-123',
+    title: 'Test Memory',
+    date: '2026-06-02T00:00:00Z',
+    description: 'This is a test description',
+    tags: ['test'],
+    transcribedText: 'This is a test transcription'
+  };
+
+  beforeEach(() => {
+    mockMemoryRepository = {
+      getTodayMemories: jest.fn(),
+      processNewMemory: jest.fn(),
+      uploadMemory: jest.fn(),
+    };
+
+    useCase = new RecordMemoryUseCase(mockMemoryRepository);
+  });
+
+  it('should call repository.uploadMemory with correct parameters when text is provided', async () => {
+    const transcribedText = 'Test transcribed text';
+    
+    mockMemoryRepository.uploadMemory.mockResolvedValue(mockMemory);
+
+    const result = await useCase.execute(transcribedText);
+
+    expect(mockMemoryRepository.uploadMemory).toHaveBeenCalledWith(transcribedText);
+    expect(mockMemoryRepository.uploadMemory).toHaveBeenCalledTimes(1);
+    expect(result).toEqual(mockMemory);
+  });
+
+  it('should throw an error when transcribedText is empty', async () => {
+    const transcribedText = '';
+
+    await expect(useCase.execute(transcribedText)).rejects.toThrow('Transcribed text is required to record a memory.');
+    expect(mockMemoryRepository.uploadMemory).not.toHaveBeenCalled();
+  });
+});

@@ -16,16 +16,24 @@ jest.mock('expo-constants', () => ({
 }));
 
 // Mock axios BEFORE importing apiClient
-const mockApiClient = jest.fn().mockResolvedValue('retried-response');
+const mockApiClient = jest.fn().mockResolvedValue('retried-response') as any;
 mockApiClient.interceptors = {
   request: { use: jest.fn() },
   response: { use: jest.fn() },
 };
 
 jest.mock('axios', () => {
+  const mApiClient = jest.fn().mockResolvedValue('retried-response') as any;
+  mApiClient.interceptors = {
+    request: { use: jest.fn() },
+    response: { use: jest.fn() },
+  };
   return {
-    create: jest.fn(() => mockApiClient),
-    post: jest.fn(),
+    __esModule: true,
+    default: {
+      create: jest.fn(() => mApiClient),
+      post: jest.fn(),
+    }
   };
 });
 
@@ -38,10 +46,10 @@ describe('apiClient', () => {
 
   beforeAll(() => {
     // Extract registered interceptors
-    const requestCalls = mockApiClient.interceptors.request.use.mock.calls;
+    const requestCalls = (apiClient as any).interceptors.request.use.mock.calls;
     requestInterceptor = requestCalls[0][0];
 
-    const responseCalls = mockApiClient.interceptors.response.use.mock.calls;
+    const responseCalls = (apiClient as any).interceptors.response.use.mock.calls;
     responseInterceptorSuccess = responseCalls[0][0];
     responseInterceptorError = responseCalls[0][1];
   });
@@ -134,7 +142,7 @@ describe('apiClient', () => {
       expect(SecureStore.setItemAsync).toHaveBeenCalledWith('auth_access_token', 'new-access');
       expect(SecureStore.setItemAsync).toHaveBeenCalledWith('auth_refresh_token', 'new-refresh');
       expect(originalRequest.headers.Authorization).toBe('Bearer new-access');
-      expect(mockApiClient).toHaveBeenCalledWith(originalRequest);
+      expect(apiClient).toHaveBeenCalledWith(originalRequest);
       expect(result).toBe('retried-response');
     });
 

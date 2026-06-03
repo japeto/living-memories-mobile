@@ -14,6 +14,10 @@ jest.mock('../../../viewModels/profile/useProfileViewModel', () => ({
   useProfileViewModel: jest.fn(),
 }));
 
+jest.mock('../../../providers/AuthProvider', () => ({
+  useAuth: jest.fn(),
+}));
+
 describe('ProfileScreen', () => {
   const mockGoBack = jest.fn();
   const mockHandleLogout = jest.fn();
@@ -25,6 +29,10 @@ describe('ProfileScreen', () => {
     });
     (useProfileViewModel as jest.Mock).mockReturnValue({
       handleLogout: mockHandleLogout,
+    });
+    const { useAuth } = require('../../../providers/AuthProvider');
+    (useAuth as jest.Mock).mockReturnValue({
+      userName: 'Rosa',
     });
   });
 

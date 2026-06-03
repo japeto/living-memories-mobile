@@ -15,23 +15,38 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.iaderegg.recuerdovivo",
+      "version": "0.1.0",
       "userInterfaceStyle": "light",
-      "buildNumber": "1",
+      "buildNumber": "3",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
-        "NSMicrophoneUsageDescription": "Recuerdo Vivo necesita acceso al micrófono para grabar tus memorias."
+        "NSMicrophoneUsageDescription": "Recuerdo Vivo necesita acceso al micrófono para grabar tus memorias.",
+        "NSSpeechRecognitionUsageDescription": "Recuerdo Vivo necesita acceso al reconocimiento de voz para transcribir tus memorias en vivo."
       }
     },
     "android": {
+      "package": "com.iaderegg.recuerdovivo",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": ["android.permission.RECORD_AUDIO"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-status-bar", "expo-font", "expo-splash-screen"]
+    "plugins": [
+      "expo-status-bar", 
+      "expo-font", 
+      "expo-splash-screen",
+      [
+        "@react-native-voice/voice",
+        {
+          "microphonePermission": "Recuerdo Vivo necesita acceso al micrófono para grabar tus memorias.",
+          "speechRecognitionPermission": "Recuerdo Vivo necesita acceso al reconocimiento de voz para transcribir tus memorias en vivo."
+        }
+      ]
+    ]
   }
 }

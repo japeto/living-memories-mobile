@@ -9,6 +9,7 @@ interface RecordingHeroProps {
   seconds: number;
   onToggle: () => void;
   layerStep: number;
+  liveText?: string;
 }
 
 const LAYERS = [
@@ -18,7 +19,7 @@ const LAYERS = [
   'Resumen',
 ];
 
-export function RecordingHero({ phase, seconds, onToggle, layerStep }: RecordingHeroProps) {
+export function RecordingHero({ phase, seconds, onToggle, layerStep, liveText }: RecordingHeroProps) {
   const theme = useTheme();
   const spinAnim = useRef(new Animated.Value(0)).current;
 
@@ -54,9 +55,16 @@ export function RecordingHero({ phase, seconds, onToggle, layerStep }: Recording
       {phase === 'idle' || phase === 'rec' ? (
         <View style={styles.recordContent}>
           <RecordButton phase={phase} onPress={onToggle} />
+          
           <Text variant="bodyLarge" style={styles.helperText}>
-            Toca para grabar un recuerdo
+            {phase === 'rec' ? formatTime(seconds) : 'Toca para grabar un recuerdo'}
           </Text>
+
+          {phase === 'rec' && (
+            <Text variant="bodyMedium" style={[styles.liveText, { color: theme.colors.outline }]}>
+              {liveText ? `"${liveText}"` : 'Escuchando...'}
+            </Text>
+          )}
         </View>
       ) : (
         <View style={styles.procContent}>
@@ -123,6 +131,12 @@ const styles = StyleSheet.create({
   helperText: {
     marginTop: 24,
     opacity: 0.6,
+  },
+  liveText: {
+    marginTop: 12,
+    paddingHorizontal: 24,
+    textAlign: 'center',
+    fontStyle: 'italic',
   },
   procContent: {
     width: '100%',
