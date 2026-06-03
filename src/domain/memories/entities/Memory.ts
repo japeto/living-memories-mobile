@@ -6,4 +6,6 @@ export interface Memory {
   topic: string;
   mood: string;
   reminder?: string;
+  title?: string;
+  status: 'processing' | 'completed' | 'failed';
 }

@@ -6,9 +6,11 @@ export interface MemoryResponse {
   id: string;
   user_id: string;
   text: string;
-  topic: string;
-  mood: string;
-  reminder?: string;
+  topic?: string;
+  mood?: string;
+  reminder_text?: string;
+  title?: string;
+  status: 'processing' | 'completed' | 'failed';
   created_at: string;
 }
 
@@ -34,9 +36,11 @@ const mapMemoryResponseToMemory = (response: MemoryResponse): Memory => {
     time: date.toLocaleTimeString([], timeOptions),
     day: dayStr,
     text: response.text,
-    topic: response.topic,
-    mood: response.mood,
-    reminder: response.reminder,
+    topic: response.topic || '',
+    mood: response.mood || '',
+    reminder: response.reminder_text,
+    title: response.title,
+    status: response.status,
   };
 };
 
