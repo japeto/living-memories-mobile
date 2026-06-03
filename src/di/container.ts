@@ -6,6 +6,7 @@ import { RegisterUseCase } from '../domain/auth/useCases/RegisterUseCase';
 import { LoginUseCase } from '../domain/auth/useCases/LoginUseCase';
 import { RestoreSessionUseCase } from '../domain/auth/useCases/RestoreSessionUseCase';
 import { RecordMemoryUseCase } from '../domain/memories/useCases/RecordMemoryUseCase';
+import { GetAllMemoriesUseCase } from '../domain/memories/useCases/GetAllMemoriesUseCase';
 
 container.registerSingleton('IMemoryRepository', MemoryRepository);
 container.registerSingleton('IAuthRepository', AuthRepository);
@@ -13,5 +14,6 @@ container.registerSingleton(RegisterUseCase);
 container.registerSingleton(LoginUseCase);
 container.registerSingleton(RestoreSessionUseCase);
 container.registerSingleton(RecordMemoryUseCase);
+container.registerSingleton(GetAllMemoriesUseCase);
 
 export { container };
