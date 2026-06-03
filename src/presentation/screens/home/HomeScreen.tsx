@@ -42,6 +42,7 @@ export function HomeScreen() {
         seconds={vm.seconds}
         onToggle={vm.onToggleRecord}
         layerStep={vm.layerStep}
+        liveText={vm.liveText}
       />
 
       <View style={styles.sectionTitleContainer}>

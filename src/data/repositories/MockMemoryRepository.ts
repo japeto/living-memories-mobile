@@ -67,8 +67,26 @@ export class MockMemoryRepository implements IMemoryRepository {
           this.memories.unshift(fallback);
           resolve(fallback);
         }
-      }, 1000); // 1 second simulated processing to make UI snappier, wait the plan says:
-      // "The recording simulation will delay the process, emitting progress or resolving after a few seconds to mock the AI processing."
+      }, 1000); // 1 second simulated processing to make UI snappier
+    });
+  }
+
+  async uploadMemory(transcribedText: string): Promise<Memory> {
+    // In a real scenario, this would call uploadMemory from memoriesApiClient.
+    // For now, we simulate the backend response.
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const newMem: Memory = {
+          id: Date.now(),
+          time: 'Ahora',
+          day: 'Hoy',
+          text: transcribedText || 'Transcripción no disponible.',
+          topic: 'Reciente',
+          mood: 'Tranquila',
+        };
+        this.memories.unshift(newMem);
+        resolve(newMem);
+      }, 1500);
     });
   }
 }

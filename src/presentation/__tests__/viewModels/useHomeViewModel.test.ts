@@ -2,22 +2,35 @@ import { renderHook, act } from '@testing-library/react-hooks';
 import { useHomeViewModel } from '../../viewModels/home/useHomeViewModel';
 import { container } from '../../../di/container';
 import { GetTodayMemoriesUseCase } from '../../../domain/memories/useCases/GetTodayMemoriesUseCase';
-import { ProcessNewMemoryUseCase } from '../../../domain/memories/useCases/ProcessNewMemoryUseCase';
 
 jest.mock('../../../domain/memories/useCases/GetTodayMemoriesUseCase');
-jest.mock('../../../domain/memories/useCases/ProcessNewMemoryUseCase');
+
+const mockStartRecording = jest.fn();
+const mockStopRecording = jest.fn();
+let onMemoryRecordedCb: any;
+
+jest.mock('../../viewModels/home/useRecordingViewModel', () => ({
+  useRecordingViewModel: jest.fn((cb) => {
+    onMemoryRecordedCb = cb;
+    return {
+      isRecording: false,
+      isProcessing: false,
+      recordingSeconds: 2, // Mocked for test
+      startRecording: mockStartRecording,
+      stopRecording: mockStopRecording,
+      permissionGranted: true,
+      error: null
+    };
+  }),
+}));
 
 describe('useHomeViewModel', () => {
   const mockGetTodayMemories = jest.fn();
-  const mockProcessNewMemory = jest.fn();
 
   beforeAll(() => {
     container.resolve = jest.fn((token: any) => {
       if (token === GetTodayMemoriesUseCase) {
         return { execute: mockGetTodayMemories };
-      }
-      if (token === ProcessNewMemoryUseCase) {
-        return { execute: mockProcessNewMemory };
       }
       return {};
     });
@@ -47,8 +60,6 @@ describe('useHomeViewModel', () => {
   it('should start recording, stop, and process new memory', async () => {
     jest.useFakeTimers();
     mockGetTodayMemories.mockImplementation(() => Promise.resolve([]));
-    const newMemory = { id: 2, text: 'New memory', time: '11:00', day: 'Hoy', topic: 'Trabajo', mood: 'Neutral' };
-    mockProcessNewMemory.mockImplementation(() => Promise.resolve(newMemory));
 
     const { result } = renderHook(() => useHomeViewModel());
     
@@ -57,45 +68,42 @@ describe('useHomeViewModel', () => {
       await Promise.resolve();
     });
 
-    act(() => {
+    await act(async () => {
       result.current.onToggleRecord();
+      await Promise.resolve(); // flush microtasks
     });
 
     expect(result.current.phase).toBe('rec');
+    expect(mockStartRecording).toHaveBeenCalled();
     
-    act(() => {
-      jest.advanceTimersByTime(2000);
-    });
-    
-    expect(result.current.seconds).toBe(2);
-
     // Stop recording
-    act(() => {
+    await act(async () => {
       result.current.onToggleRecord();
+      await Promise.resolve(); // flush microtasks
     });
 
     expect(result.current.phase).toBe('proc');
     expect(result.current.layerStep).toBe(0);
+    expect(mockStopRecording).toHaveBeenCalled();
 
-    // We need to wait for microtasks (the .then() to schedule setTimeout)
-    // Then advance the timers
-    await act(async () => {
-      await Promise.resolve(); // flush microtasks
-    });
-
-    for (let i = 1; i <= 3; i++) {
-      act(() => {
-        jest.advanceTimersByTime(800);
-      });
-      expect(result.current.layerStep).toBe(i);
-    }
-    
-    // Advance the remaining time to trigger the final setTimeout that resets everything
+    // Trigger onMemoryRecorded
     act(() => {
-      jest.advanceTimersByTime(800);
+      if (onMemoryRecordedCb) {
+        onMemoryRecordedCb();
+      }
     });
+
+    expect(result.current.layerStep).toBe(4);
+
+    // Fast forward the setTimeout inside onMemoryRecordedCb
+    await act(async () => {
+      jest.advanceTimersByTime(1000);
+      await Promise.resolve();
+    });
+
     expect(result.current.phase).toBe('idle');
-    expect(result.current.memories).toEqual([newMemory]);
+    expect(result.current.layerStep).toBe(0);
+    expect(mockGetTodayMemories).toHaveBeenCalledTimes(2); // once on mount, once on recorded
     
     jest.useRealTimers();
   });
