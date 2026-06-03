@@ -8,12 +8,12 @@ export class RecordMemoryUseCase {
     @inject('IMemoryRepository') private memoryRepository: IMemoryRepository
   ) {}
 
-  async execute(transcribedText: string): Promise<Memory> {
-    if (!transcribedText) {
+  async execute(text: string): Promise<Memory> {
+    if (!text) {
       throw new Error('Transcribed text is required to record a memory.');
     }
     
     // Pass the transcribed text to the repository (which sends it to API)
-    return this.memoryRepository.uploadMemory(transcribedText);
+    return this.memoryRepository.uploadMemory(text);
   }
 }
