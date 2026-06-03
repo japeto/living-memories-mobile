@@ -37,11 +37,19 @@ export class MockMemoryRepository implements IMemoryRepository {
   private memories: Memory[] = [...SEED];
   private newQueue: Memory[] = [...NEW_QUEUE];
 
+  async getMemories(): Promise<Memory[]> {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve([...this.memories]);
+      }, 800);
+    });
+  }
+
   async getTodayMemories(): Promise<Memory[]> {
     // Simulamos un delay de red
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve([...this.memories]);
+        resolve([...this.memories].filter(m => m.day === 'Hoy'));
       }, 800);
     });
   }

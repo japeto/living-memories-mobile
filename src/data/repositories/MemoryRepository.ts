@@ -3,7 +3,12 @@ import { Memory } from '../../domain/memories/entities/Memory';
 import { uploadMemory, getMemories } from '../network/memoriesApiClient';
 
 export class MemoryRepository implements IMemoryRepository {
+  async getMemories(): Promise<Memory[]> {
+    return await getMemories();
+  }
+
   async getTodayMemories(): Promise<Memory[]> {
+    // For now, getTodayMemories just returns all memories, we can filter in the future
     return await getMemories();
   }
 
