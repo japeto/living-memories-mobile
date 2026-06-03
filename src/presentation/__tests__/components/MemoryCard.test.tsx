@@ -9,12 +9,13 @@ jest.mock('@expo/vector-icons', () => ({
 
 describe('MemoryCard', () => {
   const defaultMemory = {
-    id: 1,
+    id: '1',
     time: '12:00',
     day: 'Hoy',
     text: 'Fui a pasear con mi nieto al parque.',
     topic: 'Familia',
     mood: 'Feliz',
+    status: 'completed' as const,
   };
 
   it('renders memory text and basic tags correctly', () => {
@@ -46,5 +47,24 @@ describe('MemoryCard', () => {
     );
 
     expect(getByText('Llamar a mi nieto mañana')).toBeTruthy();
+  });
+
+  it('renders processing state without tags and reminder', () => {
+    const processingMemory = {
+      ...defaultMemory,
+      status: 'processing' as const,
+      reminder: 'This should not be shown',
+    };
+
+    const { getByText, queryByText } = render(
+      <ThemeProvider>
+        <MemoryCard memory={processingMemory} />
+      </ThemeProvider>
+    );
+
+    expect(getByText('Analizando con IA...')).toBeTruthy();
+    expect(queryByText('Familia')).toBeNull();
+    expect(queryByText('Feliz')).toBeNull();
+    expect(queryByText('This should not be shown')).toBeNull();
   });
 });

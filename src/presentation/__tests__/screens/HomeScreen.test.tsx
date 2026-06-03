@@ -31,6 +31,7 @@ describe('HomeScreen', () => {
       phase: 'idle',
       seconds: 0,
       layerStep: 0,
+      liveText: '',
       newId: null,
       onToggleRecord: jest.fn(),
       isLoading: true,
@@ -49,11 +50,12 @@ describe('HomeScreen', () => {
   it('renders header, hero, and memories list', () => {
     mockUseHomeViewModel.mockReturnValue({
       memories: [
-        { id: 1, text: 'Test memory', time: '10:00', day: 'Hoy', topic: 'Familia', mood: 'Feliz' },
+        { id: '1', text: 'Test memory', time: '10:00', day: 'Hoy', topic: 'Familia', mood: 'Feliz', status: 'completed' as const },
       ],
       phase: 'idle',
       seconds: 0,
       layerStep: 0,
+      liveText: '',
       newId: null,
       onToggleRecord: jest.fn(),
       isLoading: false,
@@ -78,6 +80,7 @@ describe('HomeScreen', () => {
       phase: 'idle',
       seconds: 0,
       layerStep: 0,
+      liveText: '',
       newId: null,
       onToggleRecord: mockOnToggleRecord,
       isLoading: false,
@@ -91,5 +94,26 @@ describe('HomeScreen', () => {
 
     fireEvent.press(getByTestId('record-button'));
     expect(mockOnToggleRecord).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders empty state when there are no memories', () => {
+    mockUseHomeViewModel.mockReturnValue({
+      memories: [],
+      phase: 'idle',
+      seconds: 0,
+      layerStep: 0,
+      liveText: '',
+      newId: null,
+      onToggleRecord: jest.fn(),
+      isLoading: false,
+    });
+
+    const { getByText } = render(
+      <ThemeProvider>
+        <HomeScreen />
+      </ThemeProvider>
+    );
+
+    expect(getByText('No tienes notas, guarda tu primer recuerdo')).toBeTruthy();
   });
 });

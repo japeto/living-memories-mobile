@@ -8,18 +8,10 @@ interface RecordingHeroProps {
   phase: 'idle' | 'rec' | 'proc';
   seconds: number;
   onToggle: () => void;
-  layerStep: number;
   liveText?: string;
 }
 
-const LAYERS = [
-  'Voz a texto',
-  'Sentimiento',
-  'Tema',
-  'Resumen',
-];
-
-export function RecordingHero({ phase, seconds, onToggle, layerStep, liveText }: RecordingHeroProps) {
+export function RecordingHero({ phase, seconds, onToggle, liveText }: RecordingHeroProps) {
   const theme = useTheme();
   const spinAnim = useRef(new Animated.Value(0)).current;
 
@@ -76,39 +68,6 @@ export function RecordingHero({ phase, seconds, onToggle, layerStep, liveText }:
               Organizando tu recuerdo...
             </Text>
           </View>
-          
-          <View style={styles.layersContainer}>
-            {LAYERS.map((layer, index) => {
-              const isDone = layerStep > index;
-              const isCurrent = layerStep === index;
-              
-              let iconName: keyof typeof MaterialCommunityIcons.glyphMap = 'circle-outline';
-              let iconColor = theme.colors.outline;
-              
-              if (isDone) {
-                iconName = 'check-circle';
-                iconColor = theme.colors.primary;
-              } else if (isCurrent) {
-                iconName = 'dots-horizontal-circle-outline';
-                iconColor = theme.colors.primary;
-              }
-
-              return (
-                <View key={layer} style={styles.layerRow}>
-                  <MaterialCommunityIcons name={iconName} size={24} color={iconColor} />
-                  <Text 
-                    variant="bodyLarge" 
-                    style={[
-                      styles.layerText, 
-                      { color: isDone || isCurrent ? theme.colors.onSurface : theme.colors.outline }
-                    ]}
-                  >
-                    {layer}
-                  </Text>
-                </View>
-              );
-            })}
-          </View>
         </View>
       )}
 
@@ -149,16 +108,5 @@ const styles = StyleSheet.create({
   procTitle: {
     marginTop: 16,
     fontWeight: 'bold',
-  },
-  layersContainer: {
-    width: '80%',
-  },
-  layerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  layerText: {
-    marginLeft: 16,
   }
 });
