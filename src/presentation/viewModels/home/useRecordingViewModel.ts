@@ -110,7 +110,7 @@ export function useRecordingViewModel(onMemoryRecorded?: () => void): RecordingV
       
       if (!transcribedText) {
         // If nothing was recorded, we don't save the memory and exit
-        setError('No voice detected.');
+        setError('No se detectó voz.');
         return;
       }
 

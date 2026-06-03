@@ -9,7 +9,7 @@ export interface HomeViewModelState {
   phase: 'idle' | 'rec' | 'proc';
   seconds: number;
   layerStep: number;
-  newId: number | null;
+  newId: string | null;
   onToggleRecord: () => void;
   isLoading: boolean;
   liveText: string;
@@ -19,7 +19,7 @@ export function useHomeViewModel(): HomeViewModelState {
   const [memories, setMemories] = useState<Memory[]>([]);
   const [phase, setPhase] = useState<'idle' | 'rec' | 'proc'>('idle');
   const [layerStep, setLayerStep] = useState(0);
-  const [newId, setNewId] = useState<number | null>(null);
+  const [newId, setNewId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const getTodayMemoriesUseCase = container.resolve(GetTodayMemoriesUseCase);

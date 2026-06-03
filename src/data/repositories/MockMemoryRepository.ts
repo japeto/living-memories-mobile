@@ -4,32 +4,31 @@ import { Memory } from '../../domain/memories/entities/Memory';
 
 const SEED: Memory[] = [
   {
-    id: 1,
-    time: '09:30 AM',
+    id: '1',
+    time: '08:30 a.m.',
     day: 'Hoy',
-    text: 'Amanecí con energía, desayuné avena y salí a caminar por el parque. Me encontré con Marta.',
-    topic: 'Salud',
-    mood: 'Feliz',
+    text: 'Hoy me desperté pensando en la receta de arroz con leche de mi mamá. Recordé cómo olía la cocina a canela los domingos.',
+    topic: 'Familia',
+    mood: 'Nostálgica',
   },
   {
-    id: 2,
-    time: '02:15 PM',
-    day: 'Hoy',
-    text: 'Hablé con mi nieto por teléfono. Me contó que sacó buena nota en matemáticas. Me sentí muy orgullosa.',
-    topic: 'Familia',
-    mood: 'Emocionada',
-    reminder: 'Llamarlo de nuevo el domingo',
+    id: '2',
+    time: '12:15 p.m.',
+    day: 'Ayer',
+    text: 'Hablé con mi nieta Sofía. Me contó que sacó buenas notas en la escuela. Me hace sentir muy orgullosa de ella.',
+    topic: 'Nietos',
+    mood: 'Feliz',
   }
 ];
 
 const NEW_QUEUE: Memory[] = [
   {
-    id: 3,
-    time: 'Ahora',
+    id: '3',
+    time: '02:00 p.m.',
     day: 'Hoy',
-    text: 'Acabo de recordar cuando fuimos a la playa en 1985. El agua estaba tan fría pero reímos mucho.',
-    topic: 'Recuerdos',
-    mood: 'Nostálgica',
+    text: 'Acabo de encontrar una foto antigua en el cajón de la sala. Es de cuando fuimos a la playa en 1985.',
+    topic: 'Viajes',
+    mood: 'Alegre'
   }
 ];
 
@@ -39,16 +38,16 @@ export class MockMemoryRepository implements IMemoryRepository {
   private newQueue: Memory[] = [...NEW_QUEUE];
 
   async getTodayMemories(): Promise<Memory[]> {
-    // Simulate network delay
+    // Simulamos un delay de red
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve([...this.memories]);
-      }, 500);
+      }, 800);
     });
   }
 
   async processNewMemory(): Promise<Memory> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       setTimeout(() => {
         if (this.newQueue.length > 0) {
           const newMem = this.newQueue.shift()!;
@@ -57,17 +56,17 @@ export class MockMemoryRepository implements IMemoryRepository {
         } else {
           // If queue empty, generate a dummy memory
           const fallback: Memory = {
-            id: Date.now(),
-            time: 'Ahora',
+            id: Date.now().toString(),
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
             day: 'Hoy',
-            text: 'Otro recuerdo guardado exitosamente.',
-            topic: 'General',
+            text: 'Un recuerdo nuevo espontáneo que acabo de grabar porque me acordé de algo importante.',
+            topic: 'Diario',
             mood: 'Tranquila'
           };
           this.memories.unshift(fallback);
           resolve(fallback);
         }
-      }, 1000); // 1 second simulated processing to make UI snappier
+      }, 1500); // 1.5s simulando procesamiento
     });
   }
 
@@ -77,8 +76,8 @@ export class MockMemoryRepository implements IMemoryRepository {
     return new Promise((resolve) => {
       setTimeout(() => {
         const newMem: Memory = {
-          id: Date.now(),
-          time: 'Ahora',
+          id: Date.now().toString(),
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
           day: 'Hoy',
           text: transcribedText || 'Transcripción no disponible.',
           topic: 'Reciente',

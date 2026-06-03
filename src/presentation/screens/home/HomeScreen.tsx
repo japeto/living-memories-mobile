@@ -60,7 +60,7 @@ export function HomeScreen() {
       ) : (
         <FlatList
           data={vm.memories}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item.id}
           renderItem={({ item, index }) => (
             <View style={styles.timelineRow}>
               <View style={styles.timelineColumn}>

@@ -9,11 +9,11 @@ describe('RecordMemoryUseCase', () => {
 
   const mockMemory: Memory = {
     id: 'mem-123',
-    title: 'Test Memory',
-    date: '2026-06-02T00:00:00Z',
-    description: 'This is a test description',
-    tags: ['test'],
-    transcribedText: 'This is a test transcription'
+    time: '12:00',
+    day: 'Today',
+    text: 'This is a test transcription',
+    topic: 'General',
+    mood: 'Happy'
   };
 
   beforeEach(() => {

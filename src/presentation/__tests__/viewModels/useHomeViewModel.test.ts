@@ -41,7 +41,7 @@ describe('useHomeViewModel', () => {
   });
 
   it('should load initial memories on mount', async () => {
-    const mockMemories = [{ id: 1, text: 'Test memory', time: '10:00', day: 'Hoy', topic: 'Familia', mood: 'Feliz' }];
+    const mockMemories = [{ id: 'mem-1', text: 'Test memory', time: '10:00', day: 'Hoy', topic: 'Familia', mood: 'Feliz' }];
     // return a promise that resolves immediately to avoid it being completely sync
     mockGetTodayMemories.mockImplementation(() => Promise.resolve(mockMemories));
 

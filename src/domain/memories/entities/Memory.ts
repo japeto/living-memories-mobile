@@ -1,5 +1,5 @@
 export interface Memory {
-  id: number;
+  id: string;
   time: string;
   day: string;
   text: string;
