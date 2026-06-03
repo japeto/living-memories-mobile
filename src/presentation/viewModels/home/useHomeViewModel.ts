@@ -40,21 +40,34 @@ export function useHomeViewModel(): HomeViewModelState {
   const recordingVM = useRecordingViewModel(onMemoryRecorded);
 
   useEffect(() => {
-    fetchMemories();
+    fetchMemories(true);
     return () => {
       if (layerIntervalRef.current) clearInterval(layerIntervalRef.current);
     };
   }, []);
 
-  const fetchMemories = async () => {
+  useEffect(() => {
+    const hasProcessing = memories.some(m => m.status === 'processing');
+    let interval: ReturnType<typeof setInterval>;
+    if (hasProcessing) {
+      interval = setInterval(() => {
+        fetchMemories(false);
+      }, 3000);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [memories]);
+
+  const fetchMemories = async (showLoader = false) => {
     try {
-      setIsLoading(true);
+      if (showLoader) setIsLoading(true);
       const data = await getTodayMemoriesUseCase.execute();
       setMemories(data);
     } catch (error) {
       console.error(error);
     } finally {
-      setIsLoading(false);
+      if (showLoader) setIsLoading(false);
     }
   };
 

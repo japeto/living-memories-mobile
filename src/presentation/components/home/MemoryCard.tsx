@@ -26,20 +26,39 @@ export function MemoryCard({ memory, isNew }: MemoryCardProps) {
           )}
         </View>
 
+        {memory.title && (
+          <Text variant="titleMedium" style={styles.title}>
+            {memory.title}
+          </Text>
+        )}
+
         <Text variant="bodyLarge" style={styles.text}>
           {memory.text}
         </Text>
 
-        <View style={styles.tagsContainer}>
-          <Chip icon="tag" style={styles.tag} textStyle={styles.tagText} compact>
-            {memory.topic}
-          </Chip>
-          <Chip icon="emoticon-outline" style={styles.tag} textStyle={styles.tagText} compact>
-            {memory.mood}
-          </Chip>
-        </View>
+        {memory.status === 'processing' ? (
+          <View style={styles.processingContainer}>
+            <ActivityIndicator size="small" style={{ marginRight: 8 }} />
+            <Text variant="bodySmall" style={{ color: theme.colors.outline }}>
+              Analizando con IA...
+            </Text>
+          </View>
+        ) : (
+          <View style={styles.tagsContainer}>
+            {memory.topic ? (
+              <Chip icon="tag" style={styles.tag} textStyle={styles.tagText} compact>
+                {memory.topic}
+              </Chip>
+            ) : null}
+            {memory.mood ? (
+              <Chip icon="emoticon-outline" style={styles.tag} textStyle={styles.tagText} compact>
+                {memory.mood}
+              </Chip>
+            ) : null}
+          </View>
+        )}
 
-        {memory.reminder && (
+        {memory.reminder && memory.status !== 'processing' && (
           <View style={[styles.reminderContainer, { backgroundColor: theme.colors.tertiaryContainer }]}>
             <MaterialCommunityIcons name="bell-outline" size={16} color={theme.colors.onTertiaryContainer} />
             <Text variant="labelMedium" style={[styles.reminderText, { color: theme.colors.onTertiaryContainer }]}>
@@ -66,6 +85,15 @@ const styles = StyleSheet.create({
   text: {
     marginBottom: 16,
     lineHeight: 24,
+  },
+  title: {
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  processingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
   },
   tagsContainer: {
     flexDirection: 'row',

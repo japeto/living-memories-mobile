@@ -1,5 +1,12 @@
 ## Description
-This PR pivots the application from using `expo-audio` to a native S2T approach (Speech-to-Text) to enable a true live "dictation" experience for the user. It removes the previous audio file recording logic, implements `@react-native-voice/voice` for live transcription, and updates the `useRecordingViewModel` and `memoriesApiClient` to send the real-time transcribed text payload directly to the API, bypassing audio file handling.
+
+This PR introduces the processing state for memories and implements a polling mechanism to reflect asynchronous AI evaluation from the backend. 
+
+Key changes include:
+- **Memory Model Update:** Added `status` (`processing` | `completed` | `failed`) and `title` to the `Memory` domain entity and `MemoryResponse` DTO. Handled the mapping for `reminder_text`.
+- **UI Enhancements (`MemoryCard`):** Displays a specific "Analizando con IA..." (Analyzing with AI) loading indicator when the memory status is `processing`. Tags and reminders are hidden during this state. 
+- **Background Polling (`useHomeViewModel`):** Implemented a 3-second polling mechanism that activates automatically when there are memories currently in the `processing` state.
+- **Silent Loading:** Updated `fetchMemories` to support a silent background fetch (`showLoader` flag) to prevent full-screen loading indicators from interrupting the user experience during polling.
 
 ## Related Issue(s)
 N/A
