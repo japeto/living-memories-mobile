@@ -9,7 +9,7 @@ import Svg, { Path, Rect, Circle } from 'react-native-svg';
 export type IconName =
   | 'mic' | 'home' | 'book' | 'heart' | 'bell' | 'user' | 'lock' | 'mail'
   | 'eye' | 'eyeoff' | 'arrow' | 'back' | 'check' | 'plus' | 'family'
-  | 'stetho' | 'leaf' | 'sun' | 'quote' | 'play' | 'clock';
+  | 'stetho' | 'leaf' | 'sun' | 'quote' | 'play' | 'clock' | 'info' | 'chevron-right';
 
 export interface IconProps {
   name: IconName;
@@ -145,6 +145,16 @@ export function Icon({
         <Circle cx={12} cy={12} r={9} {...common} />
         <Path d="M12 7v5l3 2" {...common} />
       </>
+    ),
+    info: (
+      <>
+        <Circle cx={12} cy={12} r={10} {...common} />
+        <Path d="M12 16v-4" {...common} />
+        <Path d="M12 8h.01" {...common} />
+      </>
+    ),
+    'chevron-right': (
+      <Path d="M9 18l6-6-6-6" {...common} />
     ),
   };
 
