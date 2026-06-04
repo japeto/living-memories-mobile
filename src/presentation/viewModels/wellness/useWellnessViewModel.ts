@@ -1,32 +1,35 @@
-import { useState } from 'react';
-
-export interface WellnessData {
-  week: string;
-  moods: Array<{ day: string; level: number; label: string }>;
-  topics: Array<{ name: string; percentage: number }>;
-}
+import { useState, useEffect, useCallback } from 'react';
+import { container } from '../../../di/container';
+import { GetWeeklyWellnessUseCase } from '../../../domain/wellness/useCases/GetWeeklyWellnessUseCase';
+import { WellnessData } from '../../../domain/wellness/entities/WellnessData';
 
 export function useWellnessViewModel() {
-  const [data] = useState<WellnessData>({
-    week: 'Del 12 al 18 de Octubre',
-    moods: [
-      { day: 'L', level: 0.8, label: 'Alegría' },
-      { day: 'M', level: 0.6, label: 'Tranquilo' },
-      { day: 'M', level: 0.5, label: 'Cansancio' },
-      { day: 'J', level: 0.7, label: 'Tranquilo' },
-      { day: 'V', level: 0.9, label: 'Alegría' },
-      { day: 'S', level: 0.4, label: 'Nostalgia' },
-      { day: 'D', level: 0.8, label: 'Alegría' },
-    ],
-    topics: [
-      { name: 'Familia', percentage: 45 },
-      { name: 'Salud', percentage: 25 },
-      { name: 'Lecturas', percentage: 15 },
-      { name: 'Cotidiano', percentage: 15 },
-    ],
-  });
+  const [data, setData] = useState<WellnessData | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchData = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const useCase = container.resolve(GetWeeklyWellnessUseCase);
+      const result = await useCase.execute();
+      setData(result);
+    } catch (err: any) {
+      setError(err.message || 'Error al obtener el bienestar.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   return {
     data,
+    isLoading,
+    error,
+    refetch: fetchData,
   };
 }

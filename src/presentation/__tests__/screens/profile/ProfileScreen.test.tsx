@@ -32,6 +32,7 @@ jest.mock('../../../theme/ThemeProvider', () => ({
     radius: { pill: 999 },
     shadow: { primary: () => ({}), card: {} },
   }),
+  ThemeProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
 jest.mock('../../../providers/AuthProvider', () => ({
