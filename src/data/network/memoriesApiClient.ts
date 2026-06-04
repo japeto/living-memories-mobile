@@ -17,7 +17,7 @@ export interface MemoryResponse {
 const mapMemoryResponseToMemory = (response: MemoryResponse): Memory => {
   const date = new Date(response.created_at);
   const timeOptions: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' };
-  
+
   // Format day as "Hoy" if it's today, otherwise localized string, for simplicity let's just use a basic check or date string
   const today = new Date();
   let dayStr = date.toLocaleDateString();
@@ -44,9 +44,10 @@ const mapMemoryResponseToMemory = (response: MemoryResponse): Memory => {
   };
 };
 
-export const uploadMemory = async (text: string): Promise<Memory> => {
+export const uploadMemory = async (text: string, timeZone: string): Promise<Memory> => {
   const response = await apiClient.post<MemoryResponse>('/api/v1/memories/upload', {
-    text
+    text,
+    time_zone: timeZone,
   });
 
   return mapMemoryResponseToMemory(response.data);

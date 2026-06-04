@@ -39,16 +39,18 @@ describe('MemoryRepository', () => {
     it('should upload a memory text and return the result', async () => {
       (uploadMemory as jest.Mock).mockResolvedValue(mockMemory);
 
-      const result = await repository.uploadMemory('Memory text');
+      const result = await repository.uploadMemory('Memory text', 'America/Bogota');
 
-      expect(uploadMemory).toHaveBeenCalledWith('Memory text');
+      expect(uploadMemory).toHaveBeenCalledWith('Memory text', 'America/Bogota');
       expect(result).toEqual(mockMemory);
     });
   });
 
   describe('processNewMemory', () => {
     it('should throw Not implemented error', async () => {
-      await expect(repository.processNewMemory()).rejects.toThrow('Not implemented. Real implementation should not use this mock method.');
+      await expect(repository.processNewMemory()).rejects.toThrow(
+        'Not implemented. Real implementation should not use this mock method.',
+      );
     });
   });
 });

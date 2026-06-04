@@ -18,7 +18,7 @@ const SEED: Memory[] = [
     text: 'Hablé con mi nieta Sofía. Me contó que sacó buenas notas en la escuela. Me hace sentir muy orgullosa de ella.',
     topic: 'Nietos',
     mood: 'Feliz',
-  }
+  },
 ];
 
 const NEW_QUEUE: Memory[] = [
@@ -28,8 +28,8 @@ const NEW_QUEUE: Memory[] = [
     day: 'Hoy',
     text: 'Acabo de encontrar una foto antigua en el cajón de la sala. Es de cuando fuimos a la playa en 1985.',
     topic: 'Viajes',
-    mood: 'Alegre'
-  }
+    mood: 'Alegre',
+  },
 ];
 
 @injectable()
@@ -37,11 +37,19 @@ export class MockMemoryRepository implements IMemoryRepository {
   private memories: Memory[] = [...SEED];
   private newQueue: Memory[] = [...NEW_QUEUE];
 
+  async getMemories(): Promise<Memory[]> {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve([...this.memories]);
+      }, 800);
+    });
+  }
+
   async getTodayMemories(): Promise<Memory[]> {
     // Simulamos un delay de red
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve([...this.memories]);
+        resolve([...this.memories].filter((m) => m.day === 'Hoy'));
       }, 800);
     });
   }
@@ -61,7 +69,7 @@ export class MockMemoryRepository implements IMemoryRepository {
             day: 'Hoy',
             text: 'Un recuerdo nuevo espontáneo que acabo de grabar porque me acordé de algo importante.',
             topic: 'Diario',
-            mood: 'Tranquila'
+            mood: 'Tranquila',
           };
           this.memories.unshift(fallback);
           resolve(fallback);
@@ -70,7 +78,7 @@ export class MockMemoryRepository implements IMemoryRepository {
     });
   }
 
-  async uploadMemory(transcribedText: string): Promise<Memory> {
+  async uploadMemory(transcribedText: string, timeZone: string): Promise<Memory> {
     // In a real scenario, this would call uploadMemory from memoriesApiClient.
     // For now, we simulate the backend response.
     return new Promise((resolve) => {

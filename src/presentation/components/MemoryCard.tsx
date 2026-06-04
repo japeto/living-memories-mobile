@@ -11,13 +11,7 @@ import { Chip, Dot } from './Chip';
 import { Card } from './Card';
 import { TopicKey, MoodKey, resolveTopic, resolveMood } from '../theme/taxonomy';
 
-export interface Memory {
-  text: string;
-  time: string;
-  topic: TopicKey;
-  mood: MoodKey;
-  reminder?: string;
-}
+import { Memory } from '../../domain/memories/entities/Memory';
 
 export interface MemoryCardProps {
   m: Memory;
@@ -26,8 +20,8 @@ export interface MemoryCardProps {
 
 export function MemoryCard({ m, layout = 'diario' }: MemoryCardProps) {
   const t = useTheme();
-  const topic = resolveTopic(m.topic, t);
-  const mood = resolveMood(m.mood);
+  const topic = resolveTopic(m.topic as TopicKey, t);
+  const mood = resolveMood(m.mood as MoodKey);
 
   /* ---- GALLERY ---- */
   if (layout === 'galeria') {

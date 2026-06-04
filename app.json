@@ -17,11 +17,12 @@
       "bundleIdentifier": "com.iaderegg.recuerdovivo",
       "version": "0.1.0",
       "userInterfaceStyle": "light",
-      "buildNumber": "3",
+      "buildNumber": "6",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
         "NSMicrophoneUsageDescription": "Recuerdo Vivo necesita acceso al micrófono para grabar tus memorias.",
-        "NSSpeechRecognitionUsageDescription": "Recuerdo Vivo necesita acceso al reconocimiento de voz para transcribir tus memorias en vivo."
+        "NSSpeechRecognitionUsageDescription": "Recuerdo Vivo necesita acceso al reconocimiento de voz para transcribir tus memorias en vivo.",
+        "NSPhotoLibraryUsageDescription": "Recuerdo Vivo podría requerir acceso a la galería si decides guardar o subir una foto."
       }
     },
     "android": {
@@ -37,8 +38,8 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-status-bar", 
-      "expo-font", 
+      "expo-status-bar",
+      "expo-font",
       "expo-splash-screen",
       [
         "@react-native-voice/voice",
