@@ -16,7 +16,7 @@ export const useRemindersViewModel = () => {
       setError(null);
       const useCase = container.resolve(GetRemindersUseCase);
       const data = await useCase.execute();
-      setReminders(data);
+      setReminders(Array.isArray(data) ? data : ((data as any).data || []));
     } catch (err: any) {
       setError(err.message || 'Error al cargar los recordatorios');
     } finally {

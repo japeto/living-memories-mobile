@@ -6,6 +6,7 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import { container } from '../../../../di/container';
 import { GetProfileUseCase } from '../../../../domain/profile/useCases/GetProfileUseCase';
 import { useAuth } from '../../../providers/AuthProvider';
+import { ThemeProvider } from '../../../theme/ThemeProvider';
 
 // Mock dependencies
 jest.mock('@react-navigation/native', () => ({
@@ -49,7 +50,7 @@ describe('ProfileScreen', () => {
     (useNavigation as jest.Mock).mockReturnValue({
       goBack: mockGoBack,
     });
-    
+
     (useAuth as jest.Mock).mockReturnValue({
       logout: mockLogout,
     });
@@ -64,7 +65,9 @@ describe('ProfileScreen', () => {
   const renderScreen = () => {
     return render(
       <PaperProvider>
-        <ProfileScreen />
+        <ThemeProvider>
+          <ProfileScreen />
+        </ThemeProvider>
       </PaperProvider>
     );
   };
@@ -92,7 +95,6 @@ describe('ProfileScreen', () => {
 
     // Check email
     expect(getAllByText('rosa.mendez@correo.com').length).toBeGreaterThan(0);
-    
     // Check logout button
     expect(getByText('Cerrar Sesión')).toBeTruthy();
   });
