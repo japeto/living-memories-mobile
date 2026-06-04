@@ -40,13 +40,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       .execute()
       .then((restoredUser) => {
         if (restoredUser) {
-          setUser({
-            ...restoredUser,
-            email: 'rosa.mendez@correo.com',
-            createdAt: '2026-05-01T10:00:00.000Z',
-            preferredName: 'Rosa',
-            isEmailVerified: true,
-          });
+          setUser(restoredUser);
           setIsAuthenticated(true);
         }
       })
@@ -62,10 +56,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setUser({
       userId: id,
       displayName: name,
-      email: 'rosa.mendez@correo.com',
-      createdAt: '2026-05-01T10:00:00.000Z',
-      preferredName: 'Rosa',
-      isEmailVerified: true,
     });
     setIsAuthenticated(true);
   };
