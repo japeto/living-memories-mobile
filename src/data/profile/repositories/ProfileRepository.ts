@@ -1,3 +1,4 @@
+import { injectable } from 'tsyringe';
 import { IProfileRepository } from '../../domain/profile/repositories/IProfileRepository';
 import { UserProfile } from '../../domain/profile/entities/UserProfile';
 import { apiClient } from '../../network/apiClient';
@@ -10,6 +11,7 @@ interface ProfileResponse {
   avatar_url: string | null;
 }
 
+@injectable()
 export class ProfileRepository implements IProfileRepository {
   async getProfile(): Promise<UserProfile> {
     const response = await apiClient.get<ProfileResponse>('/api/v1/profile/me');
