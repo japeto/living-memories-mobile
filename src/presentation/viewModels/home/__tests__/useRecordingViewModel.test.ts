@@ -10,6 +10,9 @@ jest.mock('../../../../di/container', () => ({
   },
 }));
 
+const NO_SPEECH_MESSAGE = 'No se detectó voz. Intenta de nuevo.';
+const API_ERROR_MESSAGE = 'No pudimos guardar tu recuerdo. Intenta de nuevo en un momento.';
+
 describe('useRecordingViewModel', () => {
   let mockRecordMemoryUseCase: jest.Mocked<RecordMemoryUseCase>;
 
@@ -33,7 +36,7 @@ describe('useRecordingViewModel', () => {
 
     expect(result.current.isRecording).toBe(false);
     expect(result.current.liveText).toBe('');
-    
+
     // Voice listeners should be attached
     expect(Voice.onSpeechStart).toBeDefined();
     expect(Voice.onSpeechEnd).toBeDefined();
@@ -44,7 +47,7 @@ describe('useRecordingViewModel', () => {
 
   it('should handle onSpeechStart correctly', async () => {
     const { result } = renderHook(() => useRecordingViewModel());
-    
+
     act(() => {
       if (Voice.onSpeechStart) Voice.onSpeechStart({} as any);
     });
@@ -55,7 +58,7 @@ describe('useRecordingViewModel', () => {
 
   it('should update liveText when speech results are received', async () => {
     const { result } = renderHook(() => useRecordingViewModel());
-    
+
     act(() => {
       if (Voice.onSpeechResults) {
         Voice.onSpeechResults({ value: ['Hola mundo'] } as any);
@@ -93,7 +96,7 @@ describe('useRecordingViewModel', () => {
     jest.useRealTimers();
   });
 
-  it('should stop recording, process audio and clear state', async () => {
+  it('should stop recording, process audio and return ok=true on happy path', async () => {
     const mockOnMemoryRecorded = jest.fn();
     const { result } = renderHook(() => useRecordingViewModel(mockOnMemoryRecorded));
 
@@ -107,8 +110,9 @@ describe('useRecordingViewModel', () => {
 
     expect(result.current.isRecording).toBe(true);
 
+    let stopResult: any;
     await act(async () => {
-      await result.current.stopRecording();
+      stopResult = await result.current.stopRecording();
     });
 
     expect(Voice.stop).toHaveBeenCalled();
@@ -117,6 +121,8 @@ describe('useRecordingViewModel', () => {
     expect(result.current.isRecording).toBe(false);
     expect(result.current.isProcessing).toBe(false);
     expect(result.current.recordingSeconds).toBe(0);
+    expect(result.current.error).toBeNull();
+    expect(stopResult).toEqual({ ok: true });
   });
 
   it('should auto-stop recording after 3 minutes (180 seconds)', async () => {
@@ -143,20 +149,117 @@ describe('useRecordingViewModel', () => {
     jest.useRealTimers();
   });
 
-  it('should set an error if speech stops with no transcribed text', async () => {
-    const { result } = renderHook(() => useRecordingViewModel());
+  it('should return ok=false with reason=no_speech when no transcribed text is captured', async () => {
+    const mockOnMemoryRecorded = jest.fn();
+    const { result } = renderHook(() => useRecordingViewModel(mockOnMemoryRecorded));
 
     act(() => {
       if (Voice.onSpeechStart) Voice.onSpeechStart({} as any);
-      // No text received
+      // No text received — user stayed silent
     });
 
+    let stopResult: any;
     await act(async () => {
-      await result.current.stopRecording();
+      stopResult = await result.current.stopRecording();
     });
 
     expect(Voice.stop).toHaveBeenCalled();
     expect(mockRecordMemoryUseCase.execute).not.toHaveBeenCalled();
-    expect(result.current.error).toBe('No se detectó voz.');
+    // Regression: missing assertion that allowed the original bug to ship.
+    expect(mockOnMemoryRecorded).not.toHaveBeenCalled();
+    expect(result.current.error).toBe(NO_SPEECH_MESSAGE);
+    expect(result.current.isProcessing).toBe(false);
+    expect(stopResult).toEqual({
+      ok: false,
+      reason: 'no_speech',
+      message: NO_SPEECH_MESSAGE,
+    });
+  });
+
+  it('should return ok=false with reason=api_error when recordMemoryUseCase throws', async () => {
+    mockRecordMemoryUseCase.execute = jest.fn().mockRejectedValue(new Error('Network down'));
+    (container.resolve as jest.Mock).mockReturnValue(mockRecordMemoryUseCase);
+
+    const mockOnMemoryRecorded = jest.fn();
+    const { result } = renderHook(() => useRecordingViewModel(mockOnMemoryRecorded));
+
+    act(() => {
+      if (Voice.onSpeechStart) Voice.onSpeechStart({} as any);
+      if (Voice.onSpeechResults) {
+        Voice.onSpeechResults({ value: ['Texto válido'] } as any);
+      }
+    });
+
+    let stopResult: any;
+    await act(async () => {
+      stopResult = await result.current.stopRecording();
+    });
+
+    expect(Voice.stop).toHaveBeenCalled();
+    expect(mockRecordMemoryUseCase.execute).toHaveBeenCalledWith('Texto válido');
+    expect(mockOnMemoryRecorded).not.toHaveBeenCalled();
+    expect(result.current.error).toBe(API_ERROR_MESSAGE);
+    expect(result.current.isProcessing).toBe(false);
+    expect(stopResult).toEqual({
+      ok: false,
+      reason: 'api_error',
+      message: API_ERROR_MESSAGE,
+    });
+  });
+
+  it('should still process captured text when Voice.onSpeechEnd fired before stop (STT auto-end race)', async () => {
+    const mockOnMemoryRecorded = jest.fn();
+    const { result } = renderHook(() => useRecordingViewModel(mockOnMemoryRecorded));
+
+    // Simulate: user spoke, Android captured text, then STT auto-ended on silence
+    act(() => {
+      if (Voice.onSpeechStart) Voice.onSpeechStart({} as any);
+      if (Voice.onSpeechResults) {
+        Voice.onSpeechResults({ value: ['Texto capturado'] } as any);
+      }
+      if (Voice.onSpeechEnd) Voice.onSpeechEnd({} as any);
+    });
+
+    // isRecording is now false even though the user has not tapped stop yet
+    expect(result.current.isRecording).toBe(false);
+
+    let stopResult: any;
+    await act(async () => {
+      stopResult = await result.current.stopRecording();
+    });
+
+    // Regression for BUG 1: the previous `if (!isRecording) return;` guard
+    // discarded the transcription. The fix must process it regardless.
+    expect(mockRecordMemoryUseCase.execute).toHaveBeenCalledWith('Texto capturado');
+    expect(mockOnMemoryRecorded).toHaveBeenCalled();
+    expect(stopResult).toEqual({ ok: true });
+  });
+
+  it('should be idempotent on concurrent stopRecording calls', async () => {
+    const mockOnMemoryRecorded = jest.fn();
+    const { result } = renderHook(() => useRecordingViewModel(mockOnMemoryRecorded));
+
+    act(() => {
+      if (Voice.onSpeechStart) Voice.onSpeechStart({} as any);
+      if (Voice.onSpeechResults) {
+        Voice.onSpeechResults({ value: ['Texto único'] } as any);
+      }
+    });
+
+    let firstResult: any;
+    let secondResult: any;
+    await act(async () => {
+      const first = result.current.stopRecording();
+      const second = result.current.stopRecording();
+      [firstResult, secondResult] = await Promise.all([first, second]);
+    });
+
+    expect(Voice.stop).toHaveBeenCalledTimes(1);
+    expect(mockRecordMemoryUseCase.execute).toHaveBeenCalledTimes(1);
+    expect(mockOnMemoryRecorded).toHaveBeenCalledTimes(1);
+    expect(firstResult).toEqual({ ok: true });
+    expect(secondResult).toEqual({ ok: true });
+    // Both calls resolve to the same in-flight result
+    expect(firstResult).toBe(secondResult);
   });
 });
