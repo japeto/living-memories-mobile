@@ -17,7 +17,7 @@
       "bundleIdentifier": "com.iaderegg.recuerdovivo",
       "version": "0.1.0",
       "userInterfaceStyle": "light",
-      "buildNumber": "5",
+      "buildNumber": "6",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
         "NSMicrophoneUsageDescription": "Recuerdo Vivo necesita acceso al micrófono para grabar tus memorias.",

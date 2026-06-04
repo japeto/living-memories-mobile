@@ -90,7 +90,9 @@ describe('useMemoriesViewModel', () => {
 
     const { result } = renderHook(() => useMemoriesViewModel());
 
-    await act(async () => { await result.current.refetch(); });
+    await act(async () => {
+      await result.current.refetch();
+    });
 
     expect(result.current.availableTopics).toEqual(['Familia', 'Amigos']);
   });
@@ -104,7 +106,9 @@ describe('useMemoriesViewModel', () => {
 
     const { result } = renderHook(() => useMemoriesViewModel());
 
-    await act(async () => { await result.current.refetch(); });
+    await act(async () => {
+      await result.current.refetch();
+    });
 
     act(() => {
       result.current.toggleTopicFilter('Familia');

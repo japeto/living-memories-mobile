@@ -74,7 +74,7 @@ describe('MemoriesScreen', () => {
     });
 
     const { getByTestId } = render(<MemoriesScreen />);
-    const { ActivityIndicator } = require('react-native');
+
     expect(getByTestId('loading-indicator')).toBeTruthy();
   });
 
