@@ -1,9 +1,9 @@
 import { renderHook, act } from '@testing-library/react-hooks';
-import { useMemoriesViewModel } from '../../../viewModels/memories/useMemoriesViewModel';
-import { container } from '../../../../di/container';
-import { GetAllMemoriesUseCase } from '../../../../domain/memories/useCases/GetAllMemoriesUseCase';
+import { useMemoriesViewModel } from '../../viewModels/memories/useMemoriesViewModel';
+import { container } from '../../../di/container';
+import { GetAllMemoriesUseCase } from '../../../domain/memories/useCases/GetAllMemoriesUseCase';
 
-jest.mock('../../../../di/container', () => ({
+jest.mock('../../../di/container', () => ({
   container: {
     resolve: jest.fn(),
   },
