@@ -65,27 +65,20 @@ D2 — DESCRIPTION (Behavior & Git Standards)
   ```
 
 - PR CREATION:
+  CRITICAL: You MUST use the `--base develop` flag. Do NOT create PRs targeting `main`.
+  CRITICAL: You MUST use the repository's PR template for tasks (`.github/PULL_REQUEST_TEMPLATE/task.md`).
 
-  ```bash
-  git push -u origin feat/us-XX-description
-  gh pr create --base develop --title "feat: <short description>" --body "$(cat <<'EOF'
-  ## Summary
-  - Implements [task]: [name]
-
-  ## Changes
-  - `src/features/<feature>/` — new feature slice implemented
-  - `src/features/<feature>/__tests__/` — tests added
-
-  ## Test Plan
-  - [ ] All Jest tests pass
-  - [ ] Tested on iOS simulator
-  - [ ] Tested on Android emulator
-
-  ---
-  🤖 Co-authored by **Iader E. Garcia G.** & **Claude Code** · [claude.ai/claude-code](https://claude.ai/claude-code)
-  EOF
-  )"
-  ```
+  Workflow for creating a PR:
+  1. Push your branch: `git push -u origin <branch-name>`
+  2. Read the template: `cat .github/PULL_REQUEST_TEMPLATE/task.md`
+  3. Fill out the template mentally (or create a local temporary file), ensuring you check the appropriate boxes with `[x]` and add the Co-authored-by footer.
+  4. Create the PR: 
+     ```bash
+     gh pr create --base develop --title "<type>: <short description>" --body "El contenido del template llenado aquí...
+     
+     ---
+     🤖 Co-authored by **Iader E. Garcia G.** & **Claude Code**"
+     ```
 
 ### Archiving the Completed Plan
 
