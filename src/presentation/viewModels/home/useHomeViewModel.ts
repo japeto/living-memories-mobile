@@ -13,7 +13,11 @@ export interface HomeViewModelState {
   onToggleRecord: () => void;
   isLoading: boolean;
   liveText: string;
+  errorMessage: string | null;
+  dismissError: () => void;
 }
+
+const UNKNOWN_ERROR_MESSAGE = 'Ocurrió un error procesando la grabación.';
 
 export function useHomeViewModel(): HomeViewModelState {
   const [memories, setMemories] = useState<Memory[]>([]);
@@ -21,6 +25,7 @@ export function useHomeViewModel(): HomeViewModelState {
   const [layerStep, setLayerStep] = useState(0);
   const [newId, setNewId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const getTodayMemoriesUseCase = container.resolve(GetTodayMemoriesUseCase);
 
@@ -80,8 +85,35 @@ export function useHomeViewModel(): HomeViewModelState {
     setPhase('proc');
     setLayerStep(0);
     setNewId(null);
+    setErrorMessage(null);
     simulateProcessingUI();
-    await recordingVM.stopRecording();
+
+    try {
+      const result = await recordingVM.stopRecording();
+
+      if (!result.ok) {
+        if (layerIntervalRef.current) {
+          clearInterval(layerIntervalRef.current);
+          layerIntervalRef.current = null;
+        }
+        setLayerStep(0);
+        setPhase('idle');
+        setErrorMessage(result.message);
+      }
+      // Happy path is handled by onMemoryRecorded which is fired from inside
+      // recordingVM.stopRecording before it resolves.
+    } catch (err) {
+      // Safety net: recordingVM.stopRecording is expected to swallow its own
+      // errors and return a result, but if it throws we still recover the UI.
+      console.error('Unexpected error during stopRecording', err);
+      if (layerIntervalRef.current) {
+        clearInterval(layerIntervalRef.current);
+        layerIntervalRef.current = null;
+      }
+      setLayerStep(0);
+      setPhase('idle');
+      setErrorMessage(UNKNOWN_ERROR_MESSAGE);
+    }
   };
 
   const simulateProcessingUI = () => {
@@ -105,6 +137,10 @@ export function useHomeViewModel(): HomeViewModelState {
     }
   };
 
+  const dismissError = () => {
+    setErrorMessage(null);
+  };
+
   return {
     memories,
     phase,
@@ -113,7 +149,8 @@ export function useHomeViewModel(): HomeViewModelState {
     newId,
     onToggleRecord,
     isLoading,
-    liveText: recordingVM.liveText
+    liveText: recordingVM.liveText,
+    errorMessage,
+    dismissError,
   };
 }
-

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
-import { Text, Avatar, useTheme, ActivityIndicator } from 'react-native-paper';
+import { Text, Avatar, useTheme, ActivityIndicator, Snackbar } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -85,6 +85,15 @@ export function HomeScreen() {
           showsVerticalScrollIndicator={false}
         />
       )}
+      <Snackbar
+        visible={!!vm.errorMessage}
+        onDismiss={vm.dismissError}
+        duration={4000}
+        action={{ label: 'Cerrar', onPress: vm.dismissError }}
+        style={styles.snackbar}
+      >
+        {vm.errorMessage}
+      </Snackbar>
     </SafeAreaView>
   );
 }
@@ -153,5 +162,9 @@ const styles = StyleSheet.create({
   emptyText: {
     textAlign: 'center',
     marginTop: 16,
+  },
+  snackbar: {
+    marginBottom: 16,
+    marginHorizontal: 16,
   }
 });
