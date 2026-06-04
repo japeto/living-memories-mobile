@@ -4,6 +4,7 @@ import { ProfileScreen } from '../../../screens/profile/ProfileScreen';
 import { useNavigation } from '@react-navigation/native';
 import { useProfileViewModel } from '../../../viewModels/profile/useProfileViewModel';
 import { Provider as PaperProvider } from 'react-native-paper';
+import { ThemeProvider } from '../../../theme/ThemeProvider';
 
 // Mock dependencies
 jest.mock('@react-navigation/native', () => ({
@@ -29,6 +30,7 @@ describe('ProfileScreen', () => {
     });
     (useProfileViewModel as jest.Mock).mockReturnValue({
       handleLogout: mockHandleLogout,
+      user: { name: 'Rosa' }
     });
     const { useAuth } = require('../../../providers/AuthProvider');
     (useAuth as jest.Mock).mockReturnValue({
@@ -39,7 +41,9 @@ describe('ProfileScreen', () => {
   const renderScreen = () => {
     return render(
       <PaperProvider>
-        <ProfileScreen />
+        <ThemeProvider>
+          <ProfileScreen />
+        </ThemeProvider>
       </PaperProvider>
     );
   };
@@ -48,7 +52,7 @@ describe('ProfileScreen', () => {
     const { getByText, getByRole } = renderScreen();
 
     // Check header
-    expect(getByText('Perfil')).toBeTruthy();
+    expect(getByText('Mi perfil')).toBeTruthy();
     // Check name
     expect(getByText('Rosa')).toBeTruthy();
     // Check logout button
