@@ -4,5 +4,5 @@ export interface IMemoryRepository {
   getMemories(): Promise<Memory[]>;
   getTodayMemories(): Promise<Memory[]>;
   processNewMemory(): Promise<Memory>;
-  uploadMemory(text: string): Promise<Memory>;
+  uploadMemory(text: string, timeZone: string): Promise<Memory>;
 }
