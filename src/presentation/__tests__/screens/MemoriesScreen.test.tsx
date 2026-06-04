@@ -74,6 +74,7 @@ describe('MemoriesScreen', () => {
     });
 
     const { getByTestId } = render(<MemoriesScreen />);
+
     expect(getByTestId('loading-indicator')).toBeTruthy();
   });
 

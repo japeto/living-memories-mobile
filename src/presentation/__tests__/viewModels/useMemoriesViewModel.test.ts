@@ -9,7 +9,6 @@ jest.mock('../../../di/container', () => ({
   },
 }));
 
-// Mock useFocusEffect to simply call the callback immediately
 jest.mock('@react-navigation/native', () => ({
   useFocusEffect: jest.fn(),
 }));
