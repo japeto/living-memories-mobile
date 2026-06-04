@@ -30,7 +30,7 @@ describe('ProfileScreen', () => {
     });
     (useProfileViewModel as jest.Mock).mockReturnValue({
       handleLogout: mockHandleLogout,
-      user: { name: 'Rosa' }
+      user: { displayName: 'Rosa' }
     });
     const { useAuth } = require('../../../providers/AuthProvider');
     (useAuth as jest.Mock).mockReturnValue({
@@ -49,12 +49,12 @@ describe('ProfileScreen', () => {
   };
 
   it('should render correctly', () => {
-    const { getByText, getByRole } = renderScreen();
+    const { getByText, getAllByText } = renderScreen();
 
     // Check header
     expect(getByText('Mi perfil')).toBeTruthy();
     // Check name
-    expect(getByText('Rosa')).toBeTruthy();
+    expect(getAllByText('Rosa')[0]).toBeTruthy();
     // Check logout button
     expect(getByText('Cerrar Sesión')).toBeTruthy();
   });

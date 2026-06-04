@@ -4,6 +4,7 @@ import { View, Text } from 'react-native';
 import { HomeScreen } from '../screens/home/HomeScreen';
 import { MemoriesScreen } from '../screens/memories/MemoriesScreen';
 import { RemindersScreen } from '../screens/reminders/RemindersScreen';
+import { WellnessScreen } from '../screens/wellness/WellnessScreen';
 
 const PlaceholderScreen = () => (
   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -16,12 +17,14 @@ export function MainNavigator() {
   const [routes] = React.useState([
     { key: 'home', title: 'Inicio', focusedIcon: 'home', unfocusedIcon: 'home-outline' },
     { key: 'memories', title: 'Recuerdos', focusedIcon: 'book', unfocusedIcon: 'book-outline' },
+    { key: 'wellness', title: 'Bienestar', focusedIcon: 'heart', unfocusedIcon: 'heart-outline' },
     { key: 'reminders', title: 'Recordatorios', focusedIcon: 'bell', unfocusedIcon: 'bell-outline' },
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
     home: HomeScreen,
     memories: MemoriesScreen,
+    wellness: WellnessScreen,
     reminders: RemindersScreen,
   });
 

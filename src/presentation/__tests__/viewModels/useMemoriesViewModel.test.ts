@@ -9,9 +9,8 @@ jest.mock('../../../di/container', () => ({
   },
 }));
 
-// Mock useFocusEffect to simply call the callback immediately
 jest.mock('@react-navigation/native', () => ({
-  useFocusEffect: jest.fn((callback) => callback()),
+  useFocusEffect: jest.fn(),
 }));
 
 describe('useMemoriesViewModel', () => {
@@ -32,11 +31,13 @@ describe('useMemoriesViewModel', () => {
   it('debería inicializarse con estado de carga y llamar al caso de uso', async () => {
     mockGetAllMemoriesUseCase.execute.mockResolvedValue([]);
 
-    const { result, waitForNextUpdate } = renderHook(() => useMemoriesViewModel());
+    const { result } = renderHook(() => useMemoriesViewModel());
 
     expect(result.current.isLoading).toBe(true);
 
-    await waitForNextUpdate();
+    await act(async () => {
+      await result.current.refetch();
+    });
 
     expect(result.current.isLoading).toBe(false);
     expect(result.current.sections).toEqual([]);
@@ -47,9 +48,11 @@ describe('useMemoriesViewModel', () => {
   it('debería manejar errores si el caso de uso falla', async () => {
     mockGetAllMemoriesUseCase.execute.mockRejectedValue(new Error('Falla en DB'));
 
-    const { result, waitForNextUpdate } = renderHook(() => useMemoriesViewModel());
+    const { result } = renderHook(() => useMemoriesViewModel());
 
-    await waitForNextUpdate();
+    await act(async () => {
+      await result.current.refetch();
+    });
 
     expect(result.current.isLoading).toBe(false);
     expect(result.current.error).toBe('Falla en DB');
@@ -64,9 +67,11 @@ describe('useMemoriesViewModel', () => {
     ];
     mockGetAllMemoriesUseCase.execute.mockResolvedValue(mockMemories as any);
 
-    const { result, waitForNextUpdate } = renderHook(() => useMemoriesViewModel());
+    const { result } = renderHook(() => useMemoriesViewModel());
 
-    await waitForNextUpdate();
+    await act(async () => {
+      await result.current.refetch();
+    });
 
     expect(result.current.sections).toEqual([
       { title: 'Hoy', data: [mockMemories[0], mockMemories[2]] },
@@ -83,9 +88,9 @@ describe('useMemoriesViewModel', () => {
     ];
     mockGetAllMemoriesUseCase.execute.mockResolvedValue(mockMemories as any);
 
-    const { result, waitForNextUpdate } = renderHook(() => useMemoriesViewModel());
+    const { result } = renderHook(() => useMemoriesViewModel());
 
-    await waitForNextUpdate();
+    await act(async () => { await result.current.refetch(); });
 
     expect(result.current.availableTopics).toEqual(['Familia', 'Amigos']);
   });
@@ -97,9 +102,9 @@ describe('useMemoriesViewModel', () => {
     ];
     mockGetAllMemoriesUseCase.execute.mockResolvedValue(mockMemories as any);
 
-    const { result, waitForNextUpdate } = renderHook(() => useMemoriesViewModel());
+    const { result } = renderHook(() => useMemoriesViewModel());
 
-    await waitForNextUpdate();
+    await act(async () => { await result.current.refetch(); });
 
     act(() => {
       result.current.toggleTopicFilter('Familia');

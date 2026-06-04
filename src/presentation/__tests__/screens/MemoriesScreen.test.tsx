@@ -73,9 +73,9 @@ describe('MemoriesScreen', () => {
       refetch: mockRefetch,
     });
 
-    const { getByType } = render(<MemoriesScreen />);
+    const { getByTestId } = render(<MemoriesScreen />);
     const { ActivityIndicator } = require('react-native');
-    expect(getByType(ActivityIndicator)).toBeTruthy();
+    expect(getByTestId('loading-indicator')).toBeTruthy();
   });
 
   it('renderiza mensaje de error si ocurre una falla', () => {
@@ -117,7 +117,7 @@ describe('MemoriesScreen', () => {
       refetch: mockRefetch,
     });
 
-    const { getByText, getAllByTestId } = render(<MemoriesScreen />);
+    const { getByText, getAllByTestId, getByTestId } = render(<MemoriesScreen />);
     
     expect(getByText('Hoy')).toBeTruthy(); // Section Header
     expect(getByText('Recuerdo 1')).toBeTruthy(); // Memory text
