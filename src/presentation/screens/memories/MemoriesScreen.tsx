@@ -21,7 +21,7 @@ export function MemoriesScreen() {
   if (isLoading && sections.length === 0) {
     return (
       <View style={[styles.centerContainer, { backgroundColor: theme.colors.bg }]}>
-        <ActivityIndicator size="large" color={theme.colors.primary} />
+        <ActivityIndicator testID="loading-indicator" size="large" color={theme.colors.primary} />
       </View>
     );
   }

@@ -10,9 +10,12 @@ import { GetAllMemoriesUseCase } from '../domain/memories/useCases/GetAllMemorie
 import { ReminderRepository } from '../data/repositories/ReminderRepository';
 import { GetRemindersUseCase } from '../domain/reminders/useCases/GetRemindersUseCase';
 import { UpdateReminderStatusUseCase } from '../domain/reminders/useCases/UpdateReminderStatusUseCase';
+import { ProfileRepository } from '../data/profile/repositories/ProfileRepository';
+import { GetProfileUseCase } from '../domain/profile/useCases/GetProfileUseCase';
 
 container.registerSingleton('IMemoryRepository', MemoryRepository);
 container.registerSingleton('IAuthRepository', AuthRepository);
+container.registerSingleton('IProfileRepository', ProfileRepository);
 container.registerSingleton(RegisterUseCase);
 container.registerSingleton(LoginUseCase);
 container.registerSingleton(RestoreSessionUseCase);
@@ -21,5 +24,6 @@ container.registerSingleton(GetAllMemoriesUseCase);
 container.registerSingleton('IReminderRepository', ReminderRepository);
 container.registerSingleton(GetRemindersUseCase);
 container.registerSingleton(UpdateReminderStatusUseCase);
+container.registerSingleton(GetProfileUseCase);
 
 export { container };
