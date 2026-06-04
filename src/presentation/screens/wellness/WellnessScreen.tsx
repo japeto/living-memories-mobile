@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, View, StyleSheet, ActivityIndicator } from 'react-native';
+import { ScrollView, View, StyleSheet, ActivityIndicator, RefreshControl } from 'react-native';
 import { Text } from '../../components/Text';
 import { Card } from '../../components/Card';
 import { Icon } from '../../components/Icon';
@@ -17,7 +17,9 @@ export function WellnessScreen() {
     return (
       <View style={[styles.centered, { backgroundColor: t.colors.bg }]}>
         <ActivityIndicator size="large" color={t.colors.primary} />
-        <Text style={{ marginTop: 16 }} tone="soft">Cargando tu bienestar...</Text>
+        <Text style={{ marginTop: 16 }} tone="soft">
+          Cargando tu bienestar...
+        </Text>
       </View>
     );
   }
@@ -26,8 +28,14 @@ export function WellnessScreen() {
     return (
       <View style={[styles.centered, { backgroundColor: t.colors.bg, padding: 24 }]}>
         <Icon name="info" size={48} color={t.colors.primary} />
-        <Text variant="h2" style={{ marginTop: 16, textAlign: 'center' }}>Ups, algo salió mal</Text>
-        <Text variant="body" tone="soft" style={{ marginTop: 8, textAlign: 'center', marginBottom: 24 }}>
+        <Text variant="h2" style={{ marginTop: 16, textAlign: 'center' }}>
+          Ups, algo salió mal
+        </Text>
+        <Text
+          variant="body"
+          tone="soft"
+          style={{ marginTop: 8, textAlign: 'center', marginBottom: 24 }}
+        >
           {error}
         </Text>
         <Button variant="primary" onPress={refetch}>
@@ -41,9 +49,16 @@ export function WellnessScreen() {
     return (
       <View style={[styles.centered, { backgroundColor: t.colors.bg, padding: 24 }]}>
         <Icon name="mic" size={48} color={t.colors.secondary} />
-        <Text variant="h2" style={{ marginTop: 16, textAlign: 'center' }}>Aún no hay datos</Text>
-        <Text variant="body" tone="soft" style={{ marginTop: 8, textAlign: 'center', marginBottom: 24 }}>
-          Parece que no has grabado memorias esta semana. ¡Anímate a compartir lo que piensas para generar tu resumen de bienestar!
+        <Text variant="h2" style={{ marginTop: 16, textAlign: 'center' }}>
+          Aún no hay datos
+        </Text>
+        <Text
+          variant="body"
+          tone="soft"
+          style={{ marginTop: 8, textAlign: 'center', marginBottom: 24 }}
+        >
+          Parece que no has grabado memorias esta semana. ¡Anímate a compartir lo que piensas para
+          generar tu resumen de bienestar!
         </Text>
         <Button variant="soft" onPress={refetch}>
           Actualizar
@@ -53,9 +68,12 @@ export function WellnessScreen() {
   }
 
   return (
-    <ScrollView 
+    <ScrollView
       style={[styles.container, { backgroundColor: t.colors.bg }]}
       contentContainerStyle={styles.content}
+      refreshControl={
+        <RefreshControl refreshing={isLoading} onRefresh={refetch} tintColor={t.colors.primary} />
+      }
     >
       <View style={styles.header}>
         <Text variant="h1">Mi Bienestar</Text>
@@ -67,7 +85,10 @@ export function WellnessScreen() {
       <Card style={[styles.highlightCard, { backgroundColor: t.colors.secondarySoft }]}>
         <View style={styles.highlightHeader}>
           <Icon name="heart" size={24} color={t.colors.secondary} />
-          <Text variant="body" style={{ color: t.colors.secondary, marginLeft: 8, fontWeight: '600' }}>
+          <Text
+            variant="body"
+            style={{ color: t.colors.secondary, marginLeft: 8, fontWeight: '600' }}
+          >
             ESTA SEMANA
           </Text>
         </View>
@@ -92,7 +113,7 @@ export function WellnessScreen() {
           <TopicDistribution data={data.topics} />
         </Card>
       )}
-      
+
       {/* Padding at the bottom for scroll */}
       <View style={{ height: 40 }} />
     </ScrollView>

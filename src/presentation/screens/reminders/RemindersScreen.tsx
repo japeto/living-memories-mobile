@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import { Text, useTheme, ActivityIndicator } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRemindersViewModel } from '../../viewModels/reminders/useRemindersViewModel';
@@ -11,7 +11,9 @@ export function RemindersScreen() {
 
   const renderHeader = () => (
     <View style={styles.headerContainer}>
-      <Text variant="headlineMedium" style={styles.title}>Recordatorios</Text>
+      <Text variant="headlineMedium" style={styles.title}>
+        Recordatorios
+      </Text>
       <Text variant="bodyLarge" style={[styles.subtitle, { color: theme.colors.outline }]}>
         Creados solos, a partir de tu voz.
       </Text>
@@ -19,7 +21,10 @@ export function RemindersScreen() {
   );
 
   return (
-    <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.colors.background }]} edges={['top']}>
+    <SafeAreaView
+      style={[styles.safeArea, { backgroundColor: theme.colors.background }]}
+      edges={['top']}
+    >
       {vm.isLoading && vm.reminders.length === 0 ? (
         <View style={styles.centered}>
           <ActivityIndicator size="large" />
@@ -29,18 +34,22 @@ export function RemindersScreen() {
           data={vm.reminders}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <ReminderCard 
-              reminder={item} 
-              onToggle={() => vm.toggleReminderDone(item)} 
-            />
+            <ReminderCard reminder={item} onToggle={() => vm.toggleReminderDone(item)} />
           )}
           ListHeaderComponent={renderHeader}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={vm.isLoading}
+              onRefresh={vm.refetch}
+              tintColor={theme.colors.primary}
+            />
+          }
           ListEmptyComponent={
-             <View style={styles.centered}>
-               <Text style={{ color: theme.colors.outline }}>No tienes recordatorios.</Text>
-             </View>
+            <View style={styles.centered}>
+              <Text style={{ color: theme.colors.outline }}>No tienes recordatorios.</Text>
+            </View>
           }
         />
       )}
@@ -71,5 +80,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 48,
-  }
+  },
 });
