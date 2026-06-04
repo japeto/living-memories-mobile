@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, SectionList, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, SectionList, ActivityIndicator, RefreshControl } from 'react-native';
 import { useTheme } from '../../theme/ThemeProvider';
 import { useMemoriesViewModel } from '../../viewModels/memories/useMemoriesViewModel';
 import { CategoryPills } from '../../components/CategoryPills';
@@ -8,15 +8,8 @@ import { Text } from '../../components/Text';
 
 export function MemoriesScreen() {
   const theme = useTheme();
-  const {
-    isLoading,
-    error,
-    sections,
-    availableTopics,
-    selectedTopic,
-    toggleTopicFilter,
-    refetch,
-  } = useMemoriesViewModel();
+  const { isLoading, error, sections, availableTopics, selectedTopic, toggleTopicFilter, refetch } =
+    useMemoriesViewModel();
 
   if (isLoading && sections.length === 0) {
     return (
@@ -29,15 +22,19 @@ export function MemoriesScreen() {
   if (error) {
     return (
       <View style={[styles.centerContainer, { backgroundColor: theme.colors.bg }]}>
-        <Text variant="body" color={theme.colors.error}>{error}</Text>
+        <Text variant="body" color={theme.colors.error}>
+          {error}
+        </Text>
       </View>
     );
   }
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.bg }]}>
-      <Text variant="h1" style={styles.headerTitle}>Recuerdos</Text>
-      
+      <Text variant="h1" style={styles.headerTitle}>
+        Recuerdos
+      </Text>
+
       {availableTopics.length > 0 && (
         <CategoryPills
           topics={availableTopics}
@@ -67,11 +64,18 @@ export function MemoriesScreen() {
         )}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
-        refreshing={isLoading}
-        onRefresh={refetch}
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={refetch}
+            tintColor={theme.colors.primary}
+          />
+        }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text variant="body" tone="faint">No se encontraron recuerdos.</Text>
+            <Text variant="body" tone="faint">
+              No se encontraron recuerdos.
+            </Text>
           </View>
         }
       />
