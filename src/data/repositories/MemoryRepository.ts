@@ -16,7 +16,7 @@ export class MemoryRepository implements IMemoryRepository {
     throw new Error('Not implemented. Real implementation should not use this mock method.');
   }
 
-  async uploadMemory(text: string): Promise<Memory> {
-    return await uploadMemory(text);
+  async uploadMemory(text: string, timeZone: string): Promise<Memory> {
+    return await uploadMemory(text, timeZone);
   }
 }
